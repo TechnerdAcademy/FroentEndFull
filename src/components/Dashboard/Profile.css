@@ -1,0 +1,126 @@
+.profile-card {
+    background-color: #222;
+    color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 400px; /* Adjust width as needed */
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #333;
+    margin-right: 15px;
+  }
+  
+  .profile-initial {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .edit-profile {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .profile-name {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .profile-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .profile-section {
+    width: 48%;
+  }
+  
+  .profile-section-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .profile-section-content {
+    font-size: 14px;
+  }
+  
+  .profile-rank {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+  }
+  
+  .profile-rank img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+  }
+  
+  .profile-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .profile-stat {
+    width: 24%;
+    text-align: center;
+  }
+  
+  .profile-stat-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .profile-stat-value {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .streak-circle {
+    display: inline-block;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 12px;
+  }
+  
+  .coding-score-icon,
+  .problem-solved-icon,
+  .contest-rating-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+  }
+  
+  .profile-cta {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
