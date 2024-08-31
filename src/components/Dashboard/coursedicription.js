@@ -1,44 +1,50 @@
-import React from "react";
-import { Box, Typography, Button, Card, CardContent, Grid, Avatar, Divider, Paper } from "@mui/material";
-import heroImg from "../../assests/images/hero-img1.png";
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Grid2 } from "@mui/material";
+import { useParams } from 'react-router-dom';
+import main_axios from '../../utilities/mainaxios';
 
 const CourseDescription = () => {
-  const course = {
-    _id: "66cde34f89c32f07e4f99aee",
-    title: "Advanced Web Development",
-    description:
-      "An in-depth course on modern web development techniques, including front-end frameworks and back-end services. This course is designed for developers who have a basic understanding of web development and want to take their skills to the next level.",
-    price: 150,
-    discountedPrice: 120,
-    isFree: false,
-    imageUrl: heroImg,
-    objectiveDescription:
-      "Gain advanced skills in web development, including the use of popular frameworks, development tools, and best practices.",
-    tutorName: "John Smith",
-    totalDuration: 360,
-    category: "Web Development",
-    freeCourses: [
-      {
-        title: "Introduction to HTML",
-        description: "Learn the basics of HTML and how to structure web pages.",
-        tutorName: "Jane Doe",
-        imageUrl: heroImg,
-        totalDuration: 60,
-        _id: "66cde34f89c32f07e4f99aef",
-      },
-      {
-        title: "CSS Fundamentals",
-        description: "Understand the basics of CSS and how to style web pages effectively.",
-        tutorName: "Emily Johnson",
-        imageUrl: heroImg,
-        totalDuration: 90,
-        _id: "66cde34f89c32f07e4f99af0",
-      },
-    ],
+  const { courseId } = useParams(); 
+  const [course, setCourse] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  const fetchCourseDetails = async () => {
+    try {
+      const response = await main_axios.get(`/courses/courses/${courseId}`);
+      setCourse(response.data);
+    } catch (error) {
+      console.error('Error fetching course details:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    if (courseId) {
+      fetchCourseDetails();
+    }
+  }, [courseId]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!course) {
+    return (
+      <Box sx={{ padding: 4, backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
+        <Typography variant="h6" sx={{ color: "#888", textAlign: 'center' }}>
+          Course not found
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
-    <Box sx={{ padding: 4, backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
+ <Box sx={{ padding: 4, backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
       <Box sx={{ maxWidth: 1200, margin: "0 auto" }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
@@ -93,14 +99,14 @@ const CourseDescription = () => {
 
         <Divider sx={{ marginY: 4 }} />
 
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
+        <Grid2 container spacing={4}>
+          <Grid2 item xs={12}>
             <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
               Included Free Courses
             </Typography>
-            <Grid container spacing={4}>
+            <Grid2 container spacing={4}>
               {course.freeCourses.map((freeCourse) => (
-                <Grid item xs={12} md={6} key={freeCourse._id}>
+                <Grid2 item xs={12} md={6} key={freeCourse._id}>
                   <Card
                     sx={{
                       display: "flex",
@@ -126,16 +132,16 @@ const CourseDescription = () => {
                       </Typography>
                     </CardContent>
                   </Card>
-                </Grid>
+                </Grid2>
               ))}
-            </Grid>
-          </Grid>
-        </Grid>
+            </Grid2>
+          </Grid2>
+        </Grid2>
 
         <Divider sx={{ marginY: 4 }} />
 
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={8}>
+        <Grid2 container spacing={4}>
+          <Grid2 item xs={12} md={8}>
             <Box sx={{ marginBottom: 4 }}>
               <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
                 What You'll Learn
@@ -152,8 +158,8 @@ const CourseDescription = () => {
                 {course.description}
               </Typography>
             </Box>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
     </Box>
   );

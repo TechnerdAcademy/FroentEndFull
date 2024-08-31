@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"; // Import Link
 import "./header.css";
 
 const navLinks = [
-  { display: "Home", url: "/" },
+  { display: "Home", url: "/dashboard" },
   { display: "Cart", url: "#" }, // Update if you have a Cart page
   { display: "Courses", url: "/dashboard/courses" }, // Update to match dashboard route
   { display: "Profile", url: "/dashboard/profile" }, // Update if you have a Profile page

@@ -70,7 +70,7 @@ function App() {
           <Route index element={<Dashboard />} />  {/* Default dashboard route */}
           <Route path="courses" element={<Courses courses={[]} />} /> {/* Nested route for courses */}
           <Route path="profile" element={<Profile />} /> {/* Nested route for profile */}
-          <Route path="course-description" element={<CourseDescription />} /> {/* Nested route for course description */}
+          <Route path="course-description/:courseId" element={<CourseDescription />} /> 
           {/* Add other routes as needed */}
         </Route>
       </Routes>

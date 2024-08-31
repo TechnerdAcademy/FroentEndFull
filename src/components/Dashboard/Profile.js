@@ -7,6 +7,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SubscriptionIcon from '@mui/icons-material/Subscriptions';
 import PaymentIcon from '@mui/icons-material/Payment';
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 function ProfileCard() {
   const [currentTab, setCurrentTab] = useState('profile');
@@ -19,6 +20,8 @@ function ProfileCard() {
   const [language, setLanguage] = useState('C++');
   const [subscription, setSubscription] = useState('Premium Plan');
   const [paymentMode, setPaymentMode] = useState('Credit Card');
+
+  const navigate = useNavigate();
 
   const coursesEnrolled = [
     'Introduction to Programming',
@@ -47,7 +50,10 @@ function ProfileCard() {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire('Logged out!', 'You have been logged out.', 'success');
-          // Add actual logout logic here, e.g., redirect to login page
+          setTimeout(() => {
+            navigate('/'); 
+          }, 1000);
+           
         }
       });
     } else {
