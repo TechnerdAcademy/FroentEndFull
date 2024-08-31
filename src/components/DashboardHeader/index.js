@@ -8,7 +8,7 @@ const navLinks = [
   { display: "Cart", url: "#" }, // Update if you have a Cart page
   { display: "Courses", url: "/dashboard/courses" }, // Update to match dashboard route
   { display: "Profile", url: "/dashboard/profile" }, // Update if you have a Profile page
-  { display: "My courses", url: "#" } // Update if you have a My Courses page
+  { display: "My courses", url: "/dashboard/mycourse" } // Update if you have a My Courses page
 ];
 
 const Header = () => {

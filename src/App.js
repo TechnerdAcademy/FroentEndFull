@@ -43,6 +43,10 @@ const CourseDescription = loadable(() => import("./components/Dashboard/coursedi
   fallback: <Loader />
 })
 
+const MyCourse  = loadable(() => import("./components/Dashboard/mycourse"), {
+  fallback: <Loader />,
+})
+
 const LayoutWithHeaderFooter = ({ children }) => (
   <>
     <Header />
@@ -71,6 +75,7 @@ function App() {
           <Route path="courses" element={<Courses courses={[]} />} /> {/* Nested route for courses */}
           <Route path="profile" element={<Profile />} /> {/* Nested route for profile */}
           <Route path="course-description/:courseId" element={<CourseDescription />} /> 
+          <Route path="mycourse" element={<MyCourse />} /> {/* Nested route for My course */}
           {/* Add other routes as needed */}
         </Route>
       </Routes>
