@@ -20,6 +20,7 @@ import { AiOutlineMail, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible } fro
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
+import main_axios from "../../utilities/mainaxios";
 
 
 const LoginPage = () => {
@@ -61,14 +62,22 @@ const LoginPage = () => {
         return;
       }
       setEmailError("");
-      const response = await axios.post("http://localhost:4001/v1/auth/login", { email, password });
-      console.log("Login successful", response.data);
-      const { tokens } = response.data;
-      localStorage.setItem("users", JSON.stringify({ email, password }));
-      localStorage.setItem("accessToken", tokens.access.token);
-      localStorage.setItem("accessTokenExpires", tokens.access.expires);
-      localStorage.setItem("refreshToken", tokens.refresh.token);
-      localStorage.setItem("refreshTokenExpires", tokens.refresh.expires);
+      const { data } = await main_axios.post("/auth/login", {
+        email,
+        password,
+      });
+      let data2 = data;
+      console.log("Login successful", data.data);
+      
+      localStorage.setItem("lastRefreshTime", Date.now());
+
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data2.tokens.access.token);
+      localStorage.setItem("clientId", data2.user.mobile);
+      localStorage.setItem("name", data2.user.name);
+      localStorage.setItem("roleName", data2.user.roleName);
+      localStorage.setItem("roleId", data2.user.role_id);
+      localStorage.setItem("rToken", data2.tokens.refresh.token);
       toast.success("Login successful!");
       navigate('/dashboard')
     } catch (error) {
