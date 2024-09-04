@@ -5,6 +5,7 @@ import courseImg02 from "../../assests/images/kids-learning.png";
 import courseImg03 from "../../assests/images/seo.png";
 import courseImg04 from "../../assests/images/ui-ux.png";
 import "./free-course.css"; // Import the CSS file
+import { Link } from "react-router-dom";
 
 const freeCourseData = [
   {
@@ -99,6 +100,7 @@ const FreeCourse = () => {
                   <div className="single__free__course">
                     <div className="free__course__img mb-5">
                       <img src={item.imgUrl} alt={item.title} className="w-100" />
+                      
                       <button
                         className="btn free__btn"
                         style={buttonStyle}
@@ -106,6 +108,7 @@ const FreeCourse = () => {
                       >
                         Buy
                       </button>
+                      
                     </div>
                     <div className="free__course__details">
                       <h6>{item.title}</h6>

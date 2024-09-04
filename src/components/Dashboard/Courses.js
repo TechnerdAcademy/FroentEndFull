@@ -9,7 +9,7 @@ const CourseList = () => {
   // Function to fetch courses data
   const fetchCourses = async () => {
     try {
-      const response = await main_axios.get('/courses/courses');
+      const response = await main_axios.get('/courses/');
       console.log('Fetched courses:', response.data);
       setCourses(response.data);
     } catch (error) {

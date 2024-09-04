@@ -10,7 +10,7 @@ const CourseDescription = () => {
 
   const fetchCourseDetails = async () => {
     try {
-      const response = await main_axios.get(`/courses/courses/${courseId}`);
+      const response = await main_axios.get(`/courses/${courseId}`);
       setCourse(response.data);
     } catch (error) {
       console.error('Error fetching course details:', error);
