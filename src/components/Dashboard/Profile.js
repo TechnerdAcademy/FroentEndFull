@@ -8,6 +8,8 @@ import SubscriptionIcon from '@mui/icons-material/Subscriptions';
 import PaymentIcon from '@mui/icons-material/Payment';
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import main_axios from '../../utilities/mainaxios';
 
 function ProfileCard() {
   const [currentTab, setCurrentTab] = useState('profile');
@@ -53,7 +55,6 @@ function ProfileCard() {
           setTimeout(() => {
             navigate('/'); 
           }, 1000);
-           
         }
       });
     } else {
@@ -68,12 +69,42 @@ function ProfileCard() {
     setEditEmail(!editEmail);
   };
 
-  const handlePasswordChange = () => {
-    Swal.fire('Password Changed!', 'Your password has been updated.', 'success');
-    setCurrentPassword('');
-    setNewPassword('');
-    setRetypeNewPassword('');
+  const handlePasswordChange = async () => {
+    if (newPassword !== retypeNewPassword) {
+      Swal.fire('Error', 'Passwords do not match', 'error');
+      return;
+    }
+  
+    // Retrieve user object from local storage
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user ? user.id : null;
+  
+    if (!userId) {
+      Swal.fire('Error', 'User ID not found', 'error');
+      return;
+    }
+  
+    try {
+      const response = await main_axios.put('/auth/changePassword', {
+        userId,            
+        oldPassword: currentPassword,
+        newPassword
+      });
+  
+      if (response.status === 200) {
+        Swal.fire('Password Changed!', 'Your password has been updated.', 'success');
+        setCurrentPassword('');
+        setNewPassword('');
+        setRetypeNewPassword('');
+      }
+    } catch (error) {
+      
+      const errorMessage = error.response?.data?.message || 'Failed to change password';
+      Swal.fire('Error', errorMessage, 'error');
+    }
   };
+  
+  
 
   const renderContent = () => {
     switch (currentTab) {
@@ -246,52 +277,21 @@ function ProfileCard() {
                 button
                 key={index}
                 onClick={() => handleTabChange(item.tab)}
-                sx={{
-                  backgroundColor: currentTab === item.tab ? 'rgba(0, 0, 0, 0.1)' : 'inherit',
-                  borderRadius: 1,
-                  marginBottom: 1,
-                  '&::before': currentTab === item.tab ? {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    left: 0,
-                    width: 4,
-                    height: '100%',
-                    backgroundColor: 'primary.main'
-                  } : {}
-                }}
               >
-                <ListItemIcon sx={{ color: currentTab === item.tab ? 'primary.main' : 'inherit' }}>
-                  {item.icon}
-                </ListItemIcon>
+                <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
           </List>
         </Box>
-        
-        <Box
-          sx={{
-            flexGrow: 1,
-            padding: 2
-          }}
-        >
-          <Card sx={{ maxWidth: '100%', margin: 'auto', padding: 2 }}>
+        <Box sx={{ flex: 1 }}>
+          <Card>
             <CardHeader
-              avatar={<Avatar sx={{ bgcolor: 'primary.main' }}>A</Avatar>}
-              action={
-                <IconButton aria-label="edit">
-                  <EditIcon />
-                </IconButton>
-              }
-              title="iamayushanand365"
-              titleTypographyProps={{ variant: 'h6' }}
-              sx={{ marginBottom: 2 }}
+              avatar={<Avatar aria-label="profile">P</Avatar>}
+              title="Profile"
+              subheader="Update your profile details"
             />
             {renderContent()}
-            <CardContent sx={{ textAlign: 'center', marginTop: 2 }}>
-              {/* Additional content can go here */}
-            </CardContent>
           </Card>
         </Box>
       </Box>

@@ -43,7 +43,7 @@ const MyCourses = () => {
 
             {courses.length === 0 ? (
                 <Box sx={{ textAlign: 'center', padding: 5, backgroundColor: "#ffffff", borderRadius: 4, boxShadow: 3 }}>
-                    <SentimentDissatisfiedIcon sx={{ fontSize: 80, color: '#f44336', marginBottom: 2 }} />
+                    <SentimentDissatisfiedIcon sx={{ fontSize: 80, color: '#00b894', marginBottom: 2 }} />
                     <Typography variant="h6" sx={{ color: '#333', fontWeight: 'bold', marginBottom: 1 }}>
                         No Courses Found
                     </Typography>
