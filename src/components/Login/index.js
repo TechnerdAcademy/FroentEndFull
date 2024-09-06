@@ -107,6 +107,7 @@ const LoginPage = () => {
         email,
         mobile,
         password,
+         role_id: '1'
       });
       console.log("Registration successful", response.data);
       const { tokens } = response.data;
