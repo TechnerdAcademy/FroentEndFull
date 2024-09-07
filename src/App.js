@@ -12,6 +12,10 @@ import Footer from "./components/Footer/Footer";
 const AboutUs = loadable(() => import("./components/About-us/AboutUs"), {
   fallback: <Loader />,
 });
+const Description = loadable(() => import("./components/discription/index.js"), {
+  fallback: <Loader />,
+});
+
 const ChooseUs = loadable(() => import("./components/Choose-us/ChooseUs"), {
   fallback: <Loader />,
 });
@@ -69,6 +73,8 @@ function App() {
         <Route path="/testimonials" element={<LayoutWithHeaderFooter><Testimonials /></LayoutWithHeaderFooter>} />
         <Route path="/newsletter" element={<LayoutWithHeaderFooter><Newsletter /></LayoutWithHeaderFooter>} />
         <Route path="/login" element={<LayoutWithHeaderFooter><LoginModal /></LayoutWithHeaderFooter>} />
+        <Route path="/description/:courseId" element={<LayoutWithHeaderFooter><Description /></LayoutWithHeaderFooter>} />
+
       
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />  {/* Default dashboard route */}

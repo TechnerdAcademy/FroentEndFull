@@ -1,135 +1,105 @@
-import React, { useState } from "react";
-import { Container, Row, Col } from "reactstrap";
-import courseImg01 from "../../assests/images/web-development.png";
-import courseImg02 from "../../assests/images/kids-learning.png";
-import courseImg03 from "../../assests/images/seo.png";
-import courseImg04 from "../../assests/images/ui-ux.png";
-import "./free-course.css"; // Import the CSS file
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Grid, Card, CardContent, Typography, Avatar, Box, Button, Chip } from '@mui/material';
+import { Link } from 'react-router-dom';
+import main_axios from '../../utilities/mainaxios';
 
-const freeCourseData = [
-  {
-    id: "01",
-    title: "Basic Web Development Course",
-    imgUrl: courseImg01,
-    students: 5.3,
-    rating: 1.7,
-    description: "Learn the fundamentals of web development with this comprehensive course. Ideal for beginners.",
-  },
-  {
-    id: "02",
-    title: "Coding for Junior Basic Course",
-    imgUrl: courseImg02,
-    students: 5.3,
-    rating: 1.7,
-    description: "Introduce young learners to coding with fun and interactive lessons.",
-  },
-  {
-    id: "03",
-    title: "Search Engine Optimization - Basic",
-    imgUrl: courseImg03,
-    students: 5.3,
-    rating: 1.7,
-    description: "Understand the basics of SEO to improve website rankings on search engines.",
-  },
-  {
-    id: "04",
-    title: "Basic UI/UX Design - Figma",
-    imgUrl: courseImg04,
-    students: 5.3,
-    rating: 1.7,
-    description: "Learn UI/UX design principles and tools using Figma for creating user-friendly interfaces.",
-  },
-];
+const CourseList = () => {
+  const [courses, setCourses] = useState([]);
 
-const FreeCourse = () => {
-  const [selectedCourse, setSelectedCourse] = useState(null);
-
-  const handleBuyClick = (course) => {
-    setSelectedCourse(course);
+  // Function to fetch courses data
+  const fetchCourses = async () => {
+    try {
+      const response = await main_axios.get('/courses/');
+      setCourses(response.data);
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
   };
 
-  const handleBackClick = () => {
-    setSelectedCourse(null);
-  };
-
-  // Adjust button style to move it upward
-  const buttonStyle = {
-    backgroundColor: "green", // Green background color
-    color: "white",
-    border: "none",
-    padding: "4px 25px !important",
-    fontSize: "0.8rem",
-    cursor: "pointer",
-    transition: "transform 0.3s ease", // Smooth transition
-    transform: "scale(1.1)", // Scale on hover
-    position: "absolute",
-    bottom: "-12px", // Moved upward from -20px to 10px
-    right: "20px",
-    zIndex: 999999,
-  };
+  // Call fetchCourses when the component mounts
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
   return (
-    <section>
-      <Container>
-        {selectedCourse ? (
-          <div style={{ padding: "20px" }}>
-            <button onClick={handleBackClick} style={{ marginBottom: "20px" }}>
-              Back
-            </button>
-            <h2>{selectedCourse.title}</h2>
-            <img
-              src={selectedCourse.imgUrl}
-              alt={selectedCourse.title}
-              style={{ width: "100%", maxHeight: "300px", objectFit: "cover", borderRadius: "10px" }}
-            />
-            <p><strong>Rating:</strong> {selectedCourse.rating}k</p>
-            <p><strong>Students Enrolled:</strong> {selectedCourse.students}k</p>
-            <p><strong>Description:</strong> {selectedCourse.description}</p>
-          </div>
+    <Box sx={{ padding: 4, backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
+      <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#333', marginBottom: 4, textAlign: 'center' }}>
+        Explore Our Courses
+      </Typography>
+      <Grid container spacing={3}>
+        {Array.isArray(courses) && courses.length > 0 ? (
+          courses.map((course) => (
+            <Grid item xs={12} sm={6} md={4} key={course._id}>
+              <Link to={`/description/${course._id}`} style={{ textDecoration: 'none' }}>
+                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#fff' }}>
+                  <Avatar
+                    src={course.imageUrl}
+                    variant="square"
+                    sx={{
+                      width: '100%',
+                      height: 160,
+                      objectFit: 'cover',
+                      borderRadius: 0,
+                    }}
+                  />
+                  <CardContent sx={{ padding: 2 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: 1 }}>
+                      {course.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#666', marginBottom: 1 }}>
+                      <strong>Tutor:</strong> {course.tutorName}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#666', marginBottom: 1 }}>
+                      <strong>Duration:</strong> {course.totalDuration}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#666', marginBottom: 1 }}>
+                      <strong>Category:</strong> {course.category}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#666', marginBottom: 2 }}>
+                      {course.subtitle}
+                    </Typography>
+                    {course.freeCourses && course.freeCourses.length > 0 && (
+                      <Box sx={{ marginBottom: 2 }}>
+                        <Typography variant="body2" sx={{ fontWeight: 'bold', color: '#00b894' }}>
+                          Free Courses Included:
+                        </Typography>
+                        <Grid container spacing={1} sx={{ marginTop: 1 }}>
+                          {course.freeCourses.map((freeCourse) => (
+                            <Grid item xs={6} key={freeCourse._id}>
+                              <Chip label={freeCourse.title} size="small" sx={{ backgroundColor: '#f0f4f3', color: '#333' }} />
+                            </Grid>
+                          ))}
+                        </Grid>
+                      </Box>
+                    )}
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        marginTop: 'auto',
+                        backgroundColor: '#00b894',
+                        color: '#fff',
+                        textTransform: 'none',
+                        '&:hover': { backgroundColor: '#009b77' },
+                      }}
+                    >
+                      {course.isFree ? 'Enroll for Free' : `Enroll Now - $${course.discountedPrice}`}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
+            </Grid>
+          ))
         ) : (
-          <>
-            <Row>
-              <Col lg="12" className="text-center mb-5">
-                <h2 className="fw-bold">Our Courses</h2>
-              </Col>
-            </Row>
-            <Row>
-              {freeCourseData.map((item) => (
-                <Col lg="3" md="4" className="mb-4" key={item.id}>
-                  <div className="single__free__course">
-                    <div className="free__course__img mb-5">
-                      <img src={item.imgUrl} alt={item.title} className="w-100" />
-                      
-                      <button
-                        className="btn free__btn"
-                        style={buttonStyle}
-                        // onClick={() => handleBuyClick(item)}
-                      >
-                        Buy
-                      </button>
-                      
-                    </div>
-                    <div className="free__course__details">
-                      <h6>{item.title}</h6>
-                      <div className="d-flex align-items-center gap-5">
-                        <span className="d-flex align-items-center gap-2">
-                          <i className="ri-user-line"></i> {item.students}k
-                        </span>
-                        <span className="d-flex align-items-center gap-2">
-                          <i className="ri-star-fill"></i> {item.rating}k
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-              ))}
-            </Row>
-          </>
+          <Grid item xs={12}>
+            <Typography variant="h6" sx={{ color: '#666', textAlign: 'center' }}>
+              No courses available at the moment.
+            </Typography>
+          </Grid>
         )}
-      </Container>
-    </section>
+      </Grid>
+    </Box>
   );
 };
 
-export default FreeCourse;
+export default CourseList;

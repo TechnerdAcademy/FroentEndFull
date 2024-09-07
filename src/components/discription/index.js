@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Grid2  ,Chip } from "@mui/material";
+import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Grid2 ,Chip } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import main_axios from '../../utilities/mainaxios';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'; // Importing icon
+import { useNavigate } from "react-router-dom";
 
 const CourseDescription = () => {
   const { courseId } = useParams(); 
   const [course, setCourse] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleEnrollClick = () => {
+    navigate("/login"); // Navigate to login page on click
+  };
 
   const fetchCourseDetails = async () => {
     try {
@@ -45,7 +51,7 @@ const CourseDescription = () => {
   }
 
   return (
- <Box sx={{ padding: 4, backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
+    <Box sx={{ padding: 4, backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
       <Box sx={{ maxWidth: 1200, margin: "0 auto" }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
@@ -75,26 +81,27 @@ const CourseDescription = () => {
               Category: {course.category}
             </Typography>
             <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#00b894",
-                color: "#fff",
-                borderRadius: 20,
-                padding: "10px 30px",
-                textTransform: "none",
-                fontWeight: "bold",
-                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                "&:hover": { backgroundColor: "#019875" },
-                marginBottom: 2,
-              }}
-            >
-              {course.isFree ? "Enroll for Free" : `Enroll Now - $${course.discountedPrice}`}
-            </Button>
-            {!course.isFree && (
-              <Typography variant="body2" sx={{ color: "#888", textDecoration: "line-through", marginLeft: 2 }}>
-                Original Price: ${course.price}
-              </Typography>
-            )}
+        variant="contained"
+        sx={{
+          backgroundColor: "#00b894",
+          color: "#fff",
+          borderRadius: 20,
+          padding: "10px 30px",
+          textTransform: "none",
+          fontWeight: "bold",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+          "&:hover": { backgroundColor: "#019875" },
+          marginBottom: 2,
+        }}
+        onClick={handleEnrollClick} // Call navigate on click
+      >
+        {course.isFree ? "Enroll for Free" : `Enroll Now - $${course.discountedPrice}`}
+      </Button>
+      {!course.isFree && (
+        <Typography variant="body2" sx={{ color: "#888", textDecoration: "line-through", marginLeft: 2 }}>
+          Original Price: ${course.price}
+        </Typography>
+      )}
           </Grid>
         </Grid>
 
@@ -177,6 +184,7 @@ const CourseDescription = () => {
         </Box>
       )}
     </Box>
+
 
         <Divider sx={{ marginY: 4 }} />
 
