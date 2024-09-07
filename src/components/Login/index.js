@@ -102,7 +102,7 @@ const LoginPage = () => {
       setEmailError("");
       setMobileError("");
 
-      const response = await axios.post("http://localhost:4001/v1/auth/register", {
+      const response = await axios.post("/auth/register", {
         name,
         email,
         mobile,
