@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Chip, Snackbar, Alert } from "@mui/material";
+import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Chip, Snackbar, Alert , Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import main_axios from '../../utilities/mainaxios';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 const CourseDescription = () => {
   const { courseId } = useParams(); 
@@ -98,12 +100,7 @@ const CourseDescription = () => {
             <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
               Category: {course.category}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
-              Level: {course.level}
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
-              Language: {course.language}
-            </Typography>
+
             <Box sx={{ marginBottom: 2 }}>
               <Button
                 variant={purchaseType === 'regular' ? 'contained' : 'outlined'}
@@ -166,6 +163,7 @@ const CourseDescription = () => {
         <Divider sx={{ marginY: 4 }} />
 
         <Box>
+          
           <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
             Included Free Courses
           </Typography>
@@ -234,54 +232,53 @@ const CourseDescription = () => {
               ))}
             </Box>
           ) : (
-            <Typography variant="body2" sx={{ color: "#888" }}>
-              No free courses available.
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', padding: 4 }}>
+            <ErrorOutlineIcon sx={{ fontSize: 64, color: "#00b894", marginBottom: 2 }} />
+            <Typography variant="h6" sx={{ color: "#888", fontSize: 24, textAlign: 'center' }}>
+              Oops! No free courses available at the moment.
             </Typography>
+          </Box>
           )}
         </Box>
 
         <Divider sx={{ marginY: 4 }} />
 
         <Box>
-          <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
-            Objectives
-          </Typography>
+        <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>Objectives</Typography>
           <ul>
-            {course.objective && course.objective.map((item, index) => (
+            {course.objective && course.objective.map((obj, index) => (
               <li key={index}>
-                <Typography variant="body2" sx={{ color: "#555" }}>
-                  {item}
-                </Typography>
+                <Typography variant="body1">{obj}</Typography>
               </li>
             ))}
           </ul>
+        </CardContent>
+      </Card>
         </Box>
 
         <Divider sx={{ marginY: 4 }} />
-
-        <Box>
-          <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
-            What You Will Learn
-          </Typography>
+        <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>What You'll Learn</Typography>
           <ul>
             {course.whatYouLearn && course.whatYouLearn.map((item, index) => (
               <li key={index}>
-                <Typography variant="body2" sx={{ color: "#555" }}>
-                  {item}
-                </Typography>
+                <Typography variant="body1">{item}</Typography>
               </li>
             ))}
           </ul>
-        </Box>
+        </CardContent>
+      </Card>
+
 
         <Divider sx={{ marginY: 4 }} />
-
-        <Box>
-          <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
-            Projects
-          </Typography>
+        <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>Projects</Typography>
           <ul>
-            {course.projects && course.projects.map((project, index) => (
+          {course.projects && course.projects.map((project, index) => (
               <li key={index}>
                 <Typography variant="body2" sx={{ color: "#555" }}>
                   {project}
@@ -289,7 +286,40 @@ const CourseDescription = () => {
               </li>
             ))}
           </ul>
-        </Box>
+        </CardContent>
+      </Card>
+      <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>Course Content</Typography>
+          {course.CourseContent && course.CourseContent.map((week, index) => (
+            <Accordion key={week._id}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6">Week {week.weekNumber}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {week.days.map((day, dayIndex) => (
+                  <Box key={day._id} sx={{ marginBottom: '15px' }}>
+                    <Typography variant="body1" gutterBottom>
+                      <strong>{day.day}</strong>
+                    </Typography>
+                    {day.topics.map((topic) => (
+                      <Box key={topic.id} sx={{ marginLeft: '15px' }}>
+                        <Typography variant="body2">
+                          <strong>{topic.title}</strong>
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          {topic.description.join(' ')}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                ))}
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </CardContent>
+      </Card>
+
       </Box>
 
       <Snackbar

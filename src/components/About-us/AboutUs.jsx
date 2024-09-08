@@ -27,7 +27,7 @@ const AboutUs = () => {
                 <div className=" d-flex gap-5 align-items-center">
                 <div className="single__counter">
                     <span className="counter">
-                      <CountUp start={0} end={10} duration={2} suffix="+" />
+                      <CountUp start={0} end={20} duration={2} suffix="+" />
                     </span>
                     <p className="counter__title">Courses Offered</p>
                   </div>

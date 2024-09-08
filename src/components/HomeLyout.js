@@ -15,7 +15,7 @@ const HomeLayout = () => {
       <Header />
       <main>
         <HeroSection />
-        <CompanySection />
+      
         <AboutUs />
         <ChooseUs />
         <Features />

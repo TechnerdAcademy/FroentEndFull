@@ -51,7 +51,7 @@ const CourseList = () => {
                     variant="rounded"
                     sx={{
                       width: '100%',
-                      height: 180, // Reduced height
+                      height: 190, // Reduced height
                       borderRadius: 0,
                       backgroundColor: '#f0f4f3', // Light green background
                       objectFit: 'cover',
@@ -107,7 +107,7 @@ const CourseList = () => {
                         '&:hover': { backgroundColor: '#009b77' }, // Slightly darker green on hover
                       }}
                     >
-                      {course.isFree ? 'Enroll for Free' : `Enroll Now - $${course.discountedPrice}`}
+                      {course.isFree ? 'Enroll for Free' : `Enroll Now - ₹${course.discountedPrice}`}
                     </Button>
                   </CardContent>
                 </Card>

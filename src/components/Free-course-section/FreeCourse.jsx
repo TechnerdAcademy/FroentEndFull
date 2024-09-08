@@ -22,7 +22,8 @@ const CourseList = () => {
   }, []);
 
   return (
-    <Box sx={{ padding: 4, backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
+    
+    <Box sx={{ padding: 4, minHeight: "100vh" }}>
       <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#333', marginBottom: 4, textAlign: 'center' }}>
         Explore Our Courses
       </Typography>
@@ -37,7 +38,7 @@ const CourseList = () => {
                     variant="square"
                     sx={{
                       width: '100%',
-                      height: 160,
+                      height: 220,
                       objectFit: 'cover',
                       borderRadius: 0,
                     }}
@@ -46,9 +47,7 @@ const CourseList = () => {
                     <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#333', marginBottom: 1 }}>
                       {course.title}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: '#666', marginBottom: 1 }}>
-                      <strong>Tutor:</strong> {course.tutorName}
-                    </Typography>
+                 
                     <Typography variant="body2" sx={{ color: '#666', marginBottom: 1 }}>
                       <strong>Duration:</strong> {course.totalDuration}
                     </Typography>
@@ -83,7 +82,7 @@ const CourseList = () => {
                         '&:hover': { backgroundColor: '#009b77' },
                       }}
                     >
-                      {course.isFree ? 'Enroll for Free' : `Enroll Now - $${course.discountedPrice}`}
+                      {course.isFree ? 'Enroll for Free' : `Enroll Now - ₹${course.discountedPrice}`}
                     </Button>
                   </CardContent>
                 </Card>

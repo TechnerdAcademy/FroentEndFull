@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Grid2 ,Chip } from "@mui/material";
+import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Grid2 ,Chip, AccordionSummary, Accordion, AccordionDetails } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import main_axios from '../../utilities/mainaxios';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'; // Importing icon
 import { useNavigate } from "react-router-dom";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const CourseDescription = () => {
   const { courseId } = useParams(); 
@@ -74,9 +75,7 @@ const CourseDescription = () => {
             <Typography variant="subtitle1" sx={{ color: "#777", marginBottom: 3 }}>
               {course.description}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
-              Tutor: <strong>{course.tutorName}</strong> | Duration: {course.totalDuration} minutes
-            </Typography>
+         
             <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
               Category: {course.category}
             </Typography>
@@ -95,11 +94,11 @@ const CourseDescription = () => {
         }}
         onClick={handleEnrollClick} // Call navigate on click
       >
-        {course.isFree ? "Enroll for Free" : `Enroll Now - $${course.discountedPrice}`}
+        {course.isFree ? "Enroll for Free" : `Enroll Now - ₹${course.discountedPrice}`}
       </Button>
       {!course.isFree && (
         <Typography variant="body2" sx={{ color: "#888", textDecoration: "line-through", marginLeft: 2 }}>
-          Original Price: ${course.price}
+          Original Price: ₹{course.price}
         </Typography>
       )}
           </Grid>
@@ -188,27 +187,86 @@ const CourseDescription = () => {
 
         <Divider sx={{ marginY: 4 }} />
 
-        <Grid2 container spacing={4}>
-          <Grid2 item xs={12} md={8}>
-            <Box sx={{ marginBottom: 4 }}>
-              <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
-                What You'll Learn
-              </Typography>
-              <Typography variant="body1" sx={{ color: "#555", lineHeight: 1.6 }}>
-                {course.objectiveDescription}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
-                Course Details
-              </Typography>
-              <Typography variant="body1" sx={{ color: "#555", lineHeight: 1.6 }}>
-                {course.description}
-              </Typography>
-            </Box>
-          </Grid2>
-        </Grid2>
+        <Box>
+        <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>Objectives</Typography>
+          <ul>
+            {course.objective && course.objective.map((obj, index) => (
+              <li key={index}>
+                <Typography variant="body1">{obj}</Typography>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+        </Box>
+
+        <Divider sx={{ marginY: 4 }} />
+        <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>What You'll Learn</Typography>
+          <ul>
+            {course.whatYouLearn && course.whatYouLearn.map((item, index) => (
+              <li key={index}>
+                <Typography variant="body1">{item}</Typography>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+
+
+        <Divider sx={{ marginY: 4 }} />
+        <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>Projects</Typography>
+          <ul>
+          {course.projects && course.projects.map((project, index) => (
+              <li key={index}>
+                <Typography variant="body2" sx={{ color: "#555" }}>
+                  {project}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+      <Card sx={{ marginBottom: '20px' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>Course Content</Typography>
+          {course.CourseContent && course.CourseContent.map((week, index) => (
+            <Accordion key={week._id}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6">Week {week.weekNumber}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {week.days.map((day, dayIndex) => (
+                  <Box key={day._id} sx={{ marginBottom: '15px' }}>
+                    <Typography variant="body1" gutterBottom>
+                      <strong>{day.day}</strong>
+                    </Typography>
+                    {day.topics.map((topic) => (
+                      <Box key={topic.id} sx={{ marginLeft: '15px' }}>
+                        <Typography variant="body2">
+                          <strong>{topic.title}</strong>
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          {topic.description.join(' ')}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                ))}
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </CardContent>
+      </Card>
+
       </Box>
+
+   
     </Box>
   );
 };
