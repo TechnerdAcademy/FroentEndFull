@@ -23,7 +23,7 @@ const CourseDescription = () => {
       setLoading(false);
     }
   };
-   
+
   const purchaseCourse = async () => {
     try {
       const response = await main_axios.post(`/courses/purchases/`, { courseId, type: purchaseType });
@@ -93,14 +93,20 @@ const CourseDescription = () => {
               {course.description}
             </Typography>
             <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
-              Tutor: <strong>{course.tutorName}</strong> | Duration: {course.totalDuration} minutes
+              Duration: {course.totalDuration} Days
             </Typography>
             <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
               Category: {course.category}
             </Typography>
+            <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
+              Level: {course.level}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#555", marginBottom: 2 }}>
+              Language: {course.language}
+            </Typography>
             <Box sx={{ marginBottom: 2 }}>
               <Button
-                variant={purchaseType === 'demo' ? 'outlined' : 'contained'}
+                variant={purchaseType === 'regular' ? 'contained' : 'outlined'}
                 sx={{
                   marginRight: 2,
                   backgroundColor: purchaseType === 'regular' ? "#00b894" : "#fff",
@@ -114,10 +120,10 @@ const CourseDescription = () => {
                 }}
                 onClick={() => setPurchaseType('regular')}
               >
-                Enroll Now - ${course.discountedPrice}
+                Enroll Now - ₹{course.discountedPrice}
               </Button>
               <Button
-                variant={purchaseType === 'demo' ? 'outlined' : 'contained'}
+                variant={purchaseType === 'demo' ? 'contained' : 'outlined'}
                 sx={{
                   backgroundColor: purchaseType === 'demo' ? "#00b894" : "#fff",
                   color: purchaseType === 'demo' ? "#fff" : "#00b894",
@@ -147,11 +153,11 @@ const CourseDescription = () => {
               }}
               onClick={purchaseCourse}
             >
-              {course.isFree ? "Enroll for Free" : `Enroll Now - $${course.discountedPrice}`}
+              {course.isFree ? "Enroll for Free" : `Enroll Now - ₹${course.discountedPrice}`}
             </Button>
             {!course.isFree && (
               <Typography variant="body2" sx={{ color: "#888", textDecoration: "line-through", marginLeft: 2 }}>
-                Original Price: ${course.price}
+                Original Price: ₹{course.price}
               </Typography>
             )}
           </Grid>
@@ -217,10 +223,10 @@ const CourseDescription = () => {
                         {freeCourse.title}
                       </Typography>
                       <Typography variant="body2" sx={{ color: "#666", marginBottom: 1 }}>
-                        {freeCourse.description}
+                        Duration: {freeCourse.duration} minutes
                       </Typography>
-                      <Typography variant="body2" sx={{ color: "#555" }}>
-                        Duration: {freeCourse.totalDuration} minutes
+                      <Typography variant="body2" sx={{ color: "#666" }}>
+                        Category: {freeCourse.category}
                       </Typography>
                     </CardContent>
                   </Box>
@@ -228,15 +234,75 @@ const CourseDescription = () => {
               ))}
             </Box>
           ) : (
-            <Typography variant="body1" sx={{ color: "#888", textAlign: 'center' }}>
+            <Typography variant="body2" sx={{ color: "#888" }}>
               No free courses available.
             </Typography>
           )}
         </Box>
+
+        <Divider sx={{ marginY: 4 }} />
+
+        <Box>
+          <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
+            Objectives
+          </Typography>
+          <ul>
+            {course.objective && course.objective.map((item, index) => (
+              <li key={index}>
+                <Typography variant="body2" sx={{ color: "#555" }}>
+                  {item}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </Box>
+
+        <Divider sx={{ marginY: 4 }} />
+
+        <Box>
+          <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
+            What You Will Learn
+          </Typography>
+          <ul>
+            {course.whatYouLearn && course.whatYouLearn.map((item, index) => (
+              <li key={index}>
+                <Typography variant="body2" sx={{ color: "#555" }}>
+                  {item}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </Box>
+
+        <Divider sx={{ marginY: 4 }} />
+
+        <Box>
+          <Typography variant="h5" sx={{ color: "#333", fontWeight: "bold", marginBottom: 2 }}>
+            Projects
+          </Typography>
+          <ul>
+            {course.projects && course.projects.map((project, index) => (
+              <li key={index}>
+                <Typography variant="body2" sx={{ color: "#555" }}>
+                  {project}
+                </Typography>
+              </li>
+            ))}
+          </ul>
+        </Box>
       </Box>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        action={
+          <Button color="inherit" onClick={handleCloseSnackbar}>
+            Close
+          </Button>
+        }
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
