@@ -7,8 +7,10 @@ const navLinks = [
   { display: "Home", url: "/" },
   { display: "About", url: "/about-us" },
   { display: "Courses", url: "/free-course" },
-  { display: "Login", url: "/login" }, // Link to /login
-  { display: "Why Choose Us", url: "/choose-us" }
+  // Link to /login
+  // { display: "Why Choose Us", url: "/choose-us" },
+  {display:"BusinessPackage" , url:"/business-package"}, 
+  { display: "Login", url: "/login" }, 
 ];
 
 const Header = () => {

@@ -8,6 +8,7 @@ import ChooseUs from "../components/Choose-us/ChooseUs";
 import Features from "../components/Feature-section/Features";
 import FreeCourse from "../components/Free-course-section/FreeCourse";
 import Testimonials from "../components/Testimonial/Testimonials";
+import Buisnesspackage from "../components/buisness-package/index";
 
 const HomeLayout = () => {
   return (
@@ -21,6 +22,7 @@ const HomeLayout = () => {
         <Features />
         <FreeCourse />
         <Testimonials />
+        <Buisnesspackage/>
       </main>
       <Footer />
     </>
