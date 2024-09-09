@@ -22,7 +22,7 @@ const HomeLayout = () => {
         <Features />
         <FreeCourse />
         <Testimonials />
-        <Buisnesspackage/>
+        {/* <Buisnesspackage/> */}
       </main>
       <Footer />
     </>

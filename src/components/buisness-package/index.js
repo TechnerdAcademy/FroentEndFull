@@ -8,7 +8,6 @@ const BusinessPackageForm = () => {
     mobileNumber: "",
     email: "",
     description: "",
-    packageType: "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
@@ -19,9 +18,9 @@ const BusinessPackageForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { name, mobileNumber, email, description, packageType } = formData;
+    const { name, mobileNumber, email, description } = formData;
 
-    if (!name || !mobileNumber || !email || !description || !packageType) {
+    if (!name || !mobileNumber || !email || !description) {
       setError(true);
       return;
     }
@@ -35,7 +34,6 @@ const BusinessPackageForm = () => {
       mobileNumber: "",
       email: "",
       description: "",
-      packageType: "",
     });
   };
 
@@ -44,12 +42,22 @@ const BusinessPackageForm = () => {
       <Container>
         <Row className="justify-content-center">
           <Col lg="8" md="10">
-            <div className="form-header">
-              <h2 className="text-center mb-4">Business Package Inquiry</h2>
+            <div className="form-header text-center">
+              <h1 className="stunning-heading mb-4">
+                Create, Innovate, Elevate
+              </h1>
+              <h3 className="subheading">
+                Custom Business Solutions for Your Unique Needs
+              </h3>
+              <p className="pp">
+                At Technerds, we provide comprehensive solutions for your business needs. Whether you're looking to create a
+                stunning website, design captivating flyers, produce logo introduction videos, or craft introductory papers for your business, we have the right package for you.
+              </p>
+
             </div>
 
             {error && <Alert color="danger">Please fill in all fields!</Alert>}
-            {submitted && !error && <Alert color="success">Your inquiry has been submitted successfully!</Alert>}
+            {submitted && !error && <Alert color="success">Your request has been submitted successfully!</Alert>}
 
             <Form onSubmit={handleSubmit} className="business-package-form">
               <FormGroup>
@@ -92,25 +100,7 @@ const BusinessPackageForm = () => {
               </FormGroup>
 
               <FormGroup>
-                <Label for="packageType">Package Type</Label>
-                <Input
-                  type="select"
-                  name="packageType"
-                  id="packageType"
-                  value={formData.packageType}
-                  onChange={handleInputChange}
-                  className="form-input"
-                >
-                  <option value="">Select Package</option>
-                  <option value="Web Development">Web Development</option>
-                  <option value="App Development">App Development</option>
-                  <option value="Digital Marketing">Digital Marketing</option>
-                  <option value="Graphic Design">Graphic Design</option>
-                </Input>
-              </FormGroup>
-
-              <FormGroup>
-                <Label for="description">Description</Label>
+                <Label for="description">Project Description</Label>
                 <Input
                   type="textarea"
                   name="description"
@@ -122,8 +112,8 @@ const BusinessPackageForm = () => {
                 />
               </FormGroup>
 
-              <Button color="primary" type="submit" className="submit-button">
-                Submit Inquiry
+              <Button color="primary" type="submit" className="submit-button w-100">
+                Submit Your Request
               </Button>
             </Form>
           </Col>

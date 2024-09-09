@@ -103,7 +103,7 @@ const CourseDescription = () => {
           <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: "#fff" }}>
             {course.title}
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2, color: "#f7e9e9" }}>
+          <Typography variant="body1" sx={{ mb: 2, color: "#f7e9e9" ,textAlign:'justify' }}>
             {course.description}
           </Typography>
           {/* Add more course details here */}
@@ -117,8 +117,8 @@ const CourseDescription = () => {
             </Typography>
             <Box component="ul" sx={{ pl: 3, listStyleType: 'disc', color: "#6a1b9a" }}>
               {course.whatYouLearn && course.whatYouLearn.map((item, index) => (
-                <li key={index}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>{item}</Typography>
+                <li key={index} sx ={{textAlign:'justify'}}>
+                  <Typography variant="body1" sx={{ mb: 1  ,textAlign:'justify'}}>{item}</Typography>
                 </li>
               ))}
             </Box>
@@ -129,7 +129,7 @@ const CourseDescription = () => {
             <Box component="ul" sx={{ pl: 3, listStyleType: 'disc', color: "#333" }}>
               {course.objective && course.objective.map((obj, index) => (
                 <li key={index}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>{obj}</Typography>
+                  <Typography variant="body1" sx={{ mb: 1 ,textAlign:'justify' }}>{obj}</Typography>
                 </li>
               ))}
             </Box>

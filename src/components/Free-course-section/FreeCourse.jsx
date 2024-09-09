@@ -71,7 +71,7 @@ const CourseList = () => {
                         </Grid>
                       </Box>
                     )}
-                    <Button
+                    {/* <Button
                       variant="contained"
                       size="small"
                       sx={{
@@ -83,7 +83,7 @@ const CourseList = () => {
                       }}
                     >
                       {course.isFree ? 'Enroll for Free' : `Enroll Now - ₹${course.discountedPrice}`}
-                    </Button>
+                    </Button> */}
                   </CardContent>
                 </Card>
               </Link>
