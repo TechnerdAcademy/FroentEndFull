@@ -33,10 +33,10 @@ const BusinessPackageForm = () => {
 
     try {
    
-      const response = await main_axios.post("/buisnes/ ", {
+      const response = await main_axios.post("/courses/buisnes ", {
         fullname: name,
-        mobile: mobileNumber,
-        email: email,
+        mobileNumber: mobileNumber,
+        contactemail: email,
         description: description,
       });
 
