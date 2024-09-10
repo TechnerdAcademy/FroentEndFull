@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";  // Import axios for making API calls
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button, Alert } from "reactstrap";
 import "./BusinessPackageForm.css"; // Import the custom CSS
+import main_axios from "../../utilities/mainaxios";
 
 const BusinessPackageForm = () => {
   const [formData, setFormData] = useState({
@@ -11,12 +13,13 @@ const BusinessPackageForm = () => {
   });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, mobileNumber, email, description } = formData;
 
@@ -26,15 +29,33 @@ const BusinessPackageForm = () => {
     }
 
     setError(false);
-    setSubmitted(true);
-    console.log("Form Data Submitted:", formData);
+    setLoading(true);  // Show loading indicator
 
-    setFormData({
-      name: "",
-      mobileNumber: "",
-      email: "",
-      description: "",
-    });
+    try {
+   
+      const response = await main_axios.post("/buisnes/ ", {
+        fullname: name,
+        mobile: mobileNumber,
+        email: email,
+        description: description,
+      });
+
+      console.log("Form Data Submitted:", response.data);
+      setSubmitted(true);
+      
+      // Reset form data after submission
+      setFormData({
+        name: "",
+        mobileNumber: "",
+        email: "",
+        description: "",
+      });
+    } catch (err) {
+      console.error("Error submitting form data:", err);
+      setError(true);
+    } finally {
+      setLoading(false);  // Hide loading indicator
+    }
   };
 
   return (
@@ -53,10 +74,9 @@ const BusinessPackageForm = () => {
                 At Technerds, we provide comprehensive solutions for your business needs. Whether you're looking to create a
                 stunning website, design captivating flyers, produce logo introduction videos, or craft introductory papers for your business, we have the right package for you.
               </p>
-
             </div>
 
-            {error && <Alert color="danger">Please fill in all fields!</Alert>}
+            {error && <Alert color="danger">Please fill in all fields or check your input!</Alert>}
             {submitted && !error && <Alert color="success">Your request has been submitted successfully!</Alert>}
 
             <Form onSubmit={handleSubmit} className="business-package-form">
@@ -112,8 +132,8 @@ const BusinessPackageForm = () => {
                 />
               </FormGroup>
 
-              <Button color="primary" type="submit" className="submit-button w-100">
-                Submit Your Request
+              <Button color="primary" type="submit" className="submit-button w-100" disabled={loading}>
+                {loading ? 'Submitting...' : 'Submit Your Request'}
               </Button>
             </Form>
           </Col>

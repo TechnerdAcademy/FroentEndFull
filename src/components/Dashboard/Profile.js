@@ -52,6 +52,7 @@ function ProfileCard() {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire('Logged out!', 'You have been logged out.', 'success');
+          localStorage.clear();
           setTimeout(() => {
             navigate('/'); 
           }, 1000);

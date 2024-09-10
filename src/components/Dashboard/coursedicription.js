@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Chip, AccordionSummary, Accordion, AccordionDetails, Rating } from "@mui/material";
+import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Chip, AccordionSummary, Accordion, AccordionDetails, Rating ,Snackbar, Alert } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import main_axios from '../../utilities/mainaxios';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { useNavigate } from "react-router-dom";
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 const CourseDescription = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState({});
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [purchaseType, setPurchaseType] = useState('regular');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
 
  
 
@@ -25,11 +29,36 @@ const CourseDescription = () => {
     }
   };
 
+  const handlePurchaseCourse = async (courseId, type) => {
+
+     
+  
+      
+        try {
+          const response = await main_axios.post(`/courses/purchases/`, { courseId, type:type });
+          console.log('Purchased course:', response.data);
+          setSnackbarMessage('Course purchased successfully!');
+          setSnackbarSeverity('success');
+          setSnackbarOpen(true);
+          fetchCourseDetails();
+        } catch (error) {
+          console.error('Error purchasing course:', error);
+          setSnackbarMessage('Error purchasing course. Please try again.');
+          setSnackbarSeverity('error');
+          setSnackbarOpen(true);
+        }
+  };
+  
+
   useEffect(() => {
     if (courseId) {
       fetchCourseDetails();
     }
   }, [courseId]);
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
 
   if (loading) {
     return (
@@ -53,60 +82,88 @@ const CourseDescription = () => {
     <Box sx={{ padding: 4, minHeight: "100vh" }}>
       <Grid container spacing={2}>
         
-    
-      <Box sx={{ display: 'flex', border: '2px dotted #ff7043', borderRadius: 2, overflow: 'hidden', backgroundColor:"#0b0b0acf" }}>
-        {/* Left Side */}
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 3 ,  }}>
-          <Avatar
-            src={course.imageUrl}
-            variant="rounded"
-            sx={{
-              width: '60%',
-              height: 'auto',
-              borderRadius: 4,
-             
-              mb: 2
-            }}
-          />
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#ff7043",
-              color: "#fff",
-              padding: "12px 36px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              borderRadius: "30px",
-              textTransform: "none",
-              "&:hover": { backgroundColor: "#f4511e" },
-              mb: 2
-            }}
-            
-          >
-            {course.isFree ? "Register for Free" : `Register Now - ₹${course.discountedPrice}`}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        action={
+          <Button color="inherit" onClick={handleCloseSnackbar}>
+            Close
           </Button>
-          <Box sx={{ display: 'flex', alignItems: 'center'  , color: "#f7e9e9"}}>
-            <Typography variant="body2" sx={{ mr: 1 , color: "#f7e9e9" }}>Rating:</Typography>
-            <Rating
-              value={4} 
-              precision={0.5}
-              readOnly
-              sx={{ fontSize: 18, color: '#17bf9e' }}
-            />
-          </Box>
-        </Box>
+        }
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+      <Box sx={{ display: 'flex', border: '2px dotted #ff7043', borderRadius: 2, overflow: 'hidden', backgroundColor: "#0b0b0acf", position: 'relative' }}>
+  {/* Left Side */}
+  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 3 }}>
+    <Avatar
+      src={course.imageUrl}
+      variant="rounded"
+      sx={{
+        width: '60%',
+        height: 'auto',
+        borderRadius: 4,
+        mb: 2
+      }}
+    />
+<Button
+  variant="contained"
+  sx={{
+    backgroundColor: "#ff7043",
+    color: "#fff",
+    padding: "12px 36px",
+    fontSize: "18px",
+    fontWeight: "bold",
+    borderRadius: "30px",
+    textTransform: "none",
+    "&:hover": { backgroundColor: "#f4511e" },
+    mb: 2
+  }}
+  onClick={() => handlePurchaseCourse(courseId, 'regular')}
+>
+  {`Enroll Now - ₹${course.discountedPrice}`}
+</Button>
+    <Box sx={{ display: 'flex', alignItems: 'center', color: "#f7e9e9" }}>
+      <Typography variant="body2" sx={{ mr: 1, color: "#f7e9e9" }}>Rating:</Typography>
+      <Rating
+        value={4.3}
+        precision={0.5}
+        readOnly
+        sx={{ fontSize: 18, color: '#17bf9e' }}
+      />
+    </Box>
+  </Box>
 
-        {/* Right Side */}
-        <Box sx={{ flex: 1, p: 3 }}>
-          <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: "#fff" }}>
-            {course.title}
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 2, color: "#f7e9e9" ,textAlign:'justify' }}>
-            {course.description}
-          </Typography>
-          {/* Add more course details here */}
-        </Box>
-      </Box>
+  {/* Right Side */}
+  <Box sx={{ flex: 1, p: 3 }}>
+  <Chip
+  label="Enroll for Demo"
+  onClick={() => handlePurchaseCourse(courseId, 'demo')}
+  sx={{ 
+    position: 'absolute', 
+    top: 8, 
+    right: 8, 
+    cursor: 'pointer',
+    zIndex: 1,
+    backgroundColor: "#ff7043",
+    color: "#fff",
+    padding: "12px",
+  }}
+/>
+    <br></br>
+    <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: "#fff" }}>
+      {course.title}
+    </Typography>
+    <Typography variant="body1" sx={{ mb: 2, color: "#f7e9e9", textAlign: 'justify' }}>
+      {course.description}
+    </Typography>
+    {/* Add more course details here */}
+  </Box>
+</Box>
+
         {/* Course Details */}
         <Grid item xs={12} md={6}>
           <Box sx={{ mb: 4 }}>
@@ -214,13 +271,6 @@ const CourseDescription = () => {
                     <Typography variant="body2" sx={{ color: "#888", mt: 1 }}>
                       Instructor: {freeCourse.instructor}
                     </Typography>
-                    <Button
-                      variant="contained"
-                      sx={{ backgroundColor: "#ff7043", color: "#fff", mt: 2, "&:hover": { backgroundColor: "#f4511e" } }}
-                      onClick={() => navigate(`/courses/${freeCourse._id}`)}
-                    >
-                      View Course
-                    </Button>
                   </CardContent>
                 </Card>
               </Grid>
