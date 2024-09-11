@@ -22,7 +22,7 @@ const Header = () => {
         <div className="navigation d-flex align-items-center justify-content-between">
           <div className="logo">
             <h2 className="d-flex align-items-center gap-1">
-              <i className="ri-pantone-line"></i> Technerds.
+              <i className="ri-pantone-line"></i> Technerds
             </h2>
           </div>
 

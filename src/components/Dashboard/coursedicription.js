@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Chip, AccordionSummary, Accordion, AccordionDetails, Rating ,Snackbar, Alert } from "@mui/material";
+import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Chip, AccordionSummary, Accordion, AccordionDetails, Rating ,Snackbar, Alert, List, ListItemText, ListItem } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import main_axios from '../../utilities/mainaxios';
 
@@ -97,8 +97,23 @@ const CourseDescription = () => {
         </Alert>
       </Snackbar>
       <Box sx={{ display: 'flex', border: '2px dotted #ff7043', borderRadius: 2, overflow: 'hidden', backgroundColor: "#0b0b0acf", position: 'relative' }}>
+
   {/* Left Side */}
   <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 3 }}>
+  <Chip
+    
+        label={`${Math.round(((course.price - course.discountedPrice) / course.price) * 100)}% OFF`}
+        color="secondary"
+        sx={{
+          position: 'absolute',
+          top: 16,
+          left: 16,
+          borderRadius: '16px',
+          backgroundColor: '#17bf9e',
+          color: '#fff',
+        }}
+      />
+
     <Avatar
       src={course.imageUrl}
       variant="rounded"
@@ -118,14 +133,23 @@ const CourseDescription = () => {
     fontSize: "18px",
     fontWeight: "bold",
     borderRadius: "30px",
+    fontSize: '1.25rem',
+    padding: '10px 16px',
+    '& .MuiChip-label': {
+      fontSize: '1.25rem', 
+    },
+
     textTransform: "none",
+    
+   
     "&:hover": { backgroundColor: "#f4511e" },
     mb: 2
   }}
   onClick={() => handlePurchaseCourse(courseId, 'regular')}
 >
-  {`Enroll Now - ₹${course.discountedPrice}`}
+  {`Enroll Now -  ₹${course.discountedPrice}`}
 </Button>
+
     <Box sx={{ display: 'flex', alignItems: 'center', color: "#f7e9e9" }}>
       <Typography variant="body2" sx={{ mr: 1, color: "#f7e9e9" }}>Rating:</Typography>
       <Rating
@@ -154,6 +178,7 @@ const CourseDescription = () => {
   }}
 />
     <br></br>
+    
     <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: "#fff" }}>
       {course.title}
     </Typography>
@@ -204,6 +229,50 @@ const CourseDescription = () => {
 
         <Grid item xs={12} md={6}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', mt: 4 }}>
+  <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3, color: "#333" }}>
+  Unlock Premium Course Features
+  </Typography>
+  {course.Included && course.Included.map((item, index) => (
+    <Box
+      key={item._id}
+      sx={{
+        width: '100%',
+        backgroundColor: '#f9f9f9',
+        borderRadius: '8px',
+        p: 3,
+        mb: 3,
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
+      }}
+    >
+      <Typography variant="h6" sx={{ color: '#00796b', fontWeight: 'bold', mb: 2 }}>
+        {`You Will Receive a ${item.certification}`}
+      </Typography>
+
+      <Typography variant="body1" sx={{ mb: 2 }}>
+        <strong>Learning Hours:</strong> Gain {item.hoursOfLearning} hours of comprehensive learning.
+      </Typography>
+
+      <Typography variant="body1" sx={{ mb: 2 }}>
+      <strong>Internship Opportunity:</strong> {item.internshipOpportunity ? 
+        'Yes, included! You will get a chance to gain real-world experience and enhance your skills.' : 
+        'Unfortunately, not included.'
+      }
+    </Typography>
+
+        {item.resources.map((resource, idx) => (
+          <ListItem key={idx} >
+            <ListItemText primary={resource} />
+          </ListItem>
+        ))}
+   
+
+      {index !== course.Included.length - 1 && <Divider sx={{ mt: 3 }} />}
+    </Box>
+  ))}
+</Box>
+
+
             <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: "#333" }}>
               Course Content
             </Typography>
