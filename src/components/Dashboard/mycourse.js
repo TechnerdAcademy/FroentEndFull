@@ -154,7 +154,7 @@ const MyCourses = () => {
                                                         <Stack direction="row" spacing={1} alignItems="center">
                                                             <AccessTimeIcon fontSize="small" sx={{ color: '#004d40' }} />
                                                             <Typography variant="body2" color="text.secondary">
-                                                                {freeCourse.totalDuration}
+                                                                {freeCourse.totalDuration} Days
                                                             </Typography>
                                                         </Stack>
                                                         <Button 

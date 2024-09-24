@@ -39,11 +39,11 @@ const Header = () => {
               </ul>
             </div>
 
-            <div className="nav__right">
+            {/* <div className="nav__right">
               <p className="mb-0 d-flex align-items-center gap-2">
                 <i className="ri-phone-line"></i> +91 7696842820
               </p>
-            </div>
+            </div> */}
           </div>
 
           <div className="mobile__menu">

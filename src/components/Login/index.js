@@ -71,7 +71,6 @@ const LoginPage = () => {
       console.log("Login successful", data.data);
       
       localStorage.setItem("lastRefreshTime", Date.now());
-
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data2.tokens.access.token);
       localStorage.setItem("clientId", data2.user.mobile);
@@ -80,15 +79,19 @@ const LoginPage = () => {
       localStorage.setItem("roleId", data2.user.role_id);
       localStorage.setItem("rToken", data2.tokens.refresh.token);
       toast.success("Login successful!");
-      navigate('/dashboard')
+      navigate('/dashboard');
     } catch (error) {
       console.error("Login error", error);
-      toast.error("Login failed. Please check your credentials.");
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message); // Show API error message
+      } else {
+        toast.error("Login failed. Please check your credentials.");
+      }
     } finally {
       setLoading(false);
     }
   };
-
+  
   const handleRegister = async () => {
     try {
       setLoading(true);
@@ -102,13 +105,13 @@ const LoginPage = () => {
       }
       setEmailError("");
       setMobileError("");
-
+  
       const response = await main_axios.post("/auth/register", {
         name,
         email,
         mobile,
         password,
-         role_id: '1'
+        role_id: '1',
       });
       console.log("Registration successful", response.data);
       const { tokens } = response.data;
@@ -118,11 +121,16 @@ const LoginPage = () => {
       toast.success("Registration successful!");
     } catch (error) {
       console.error("Registration error", error);
-      toast.error("Registration failed. Please try again.");
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message); // Show API error message
+      } else {
+        toast.error("Registration failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleForgotPassword = async () => {
     try {
