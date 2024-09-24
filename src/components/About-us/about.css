@@ -4,6 +4,11 @@
   color: #0a2b1e;
 }
 
+.about__content p {
+  text-align: justify;
+}
+
+
 .counter__title {
   font-size: 1rem;
   color: #0a2b1e;

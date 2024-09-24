@@ -20,21 +20,23 @@ const AboutUs = () => {
             <div className="about__content">
               <h2>About Us</h2>
               <p>
-                Welcome to Technerds, your go-to platform for all things e-learning. Our mission is to make education accessible and enjoyable for everyone, regardless of their location or background. We offer a wide range of courses designed to help you achieve your educational and professional goals.
+              Welcome to Technerds, your go-to platform for all things e-learning. Our mission is to make education 
+              accessible and enjoyable for everyone, regardless of their location or background. We offer a wide
+              range of courses designed to help you achieve your educational and professional goals
               </p>
 
               <div className="about__counter">
                 <div className=" d-flex gap-5 align-items-center">
                 <div className="single__counter">
                     <span className="counter">
-                      <CountUp start={0} end={500} duration={2} suffix="+" />
+                      <CountUp start={0} end={20} duration={2} suffix="+" />
                     </span>
                     <p className="counter__title">Courses Offered</p>
                   </div>
 
                   <div className="single__counter">
                     <span className="counter">
-                      <CountUp start={0} end={20000} duration={2} suffix="+" />
+                      <CountUp start={0} end={200} duration={2} suffix="+" />
                     </span>
                     <p className="counter__title">Students Enrolled</p>
                   </div>
@@ -50,7 +52,7 @@ const AboutUs = () => {
 
                   <div className="single__counter">
                     <span className="counter">
-                      <CountUp start={0} end={20} duration={2} suffix="+" />
+                      <CountUp start={0} end={10} duration={2} suffix="+" />
                     </span>
                     <p className="counter__title">Expert Instructors</p>
                   </div>

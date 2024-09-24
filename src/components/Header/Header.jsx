@@ -7,13 +7,15 @@ const navLinks = [
   { display: "Home", url: "/" },
   { display: "About", url: "/about-us" },
   { display: "Courses", url: "/free-course" },
-  { display: "Login", url: "/login" }, // Link to /login
-  { display: "Why Choose Us", url: "/choose-us" }
+  // Link to /login
+  // { display: "Why Choose Us", url: "/choose-us" },
+  {display:"BusinessPackage" , url:"/business-package"}, 
+  { display: "Login", url: "/login" }, 
 ];
 
 const Header = () => {
   const menuRef = useRef();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const menuToggle = () => menuRef.current.classList.toggle("active__menu");
 
@@ -23,7 +25,7 @@ const Header = () => {
         <div className="navigation d-flex align-items-center justify-content-between">
           <div className="logo">
             <h2 className="d-flex align-items-center gap-1">
-              <i className="ri-pantone-line"></i> Technerds.
+              <i className="ri-pantone-line"></i> Technerds
             </h2>
           </div>
 
@@ -42,7 +44,7 @@ const Header = () => {
 
             <div className="nav__right">
               <p className="mb-0 d-flex align-items-center gap-2">
-                <i className="ri-phone-line"></i> +91 9693329842
+                <i className="ri-phone-line"></i> +91 7696842820
               </p>
             </div>
           </div>

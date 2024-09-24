@@ -6,16 +6,16 @@ import "./footer.css";
 const footerQuickLinks = [
   {
     display: "Home",
-    url: "#",
+    url: "/",
   },
   {
     display: "About US",
-    url: "#",
+    url: "/about-us",
   },
 
   {
     display: "Courses",
-    url: "#",
+    url: "/free-course",
   },
 
   {
@@ -34,10 +34,6 @@ const footerInfoLinks = [
     url: "#",
   },
 
-  {
-    display: "Purchases Guide",
-    url: "#",
-  },
 
   {
     display: "Terms of Service",
@@ -52,7 +48,7 @@ const Footer = () => {
         <Row>
           <Col lg="3" md="6" className="mb-4">
             <h2 className=" d-flex align-items-center gap-1">
-              <i class="ri-pantone-line"></i> Technerds.
+              <i class="ri-pantone-line"></i> Technerds
             </h2>
 
             <div className="follows">
@@ -114,8 +110,8 @@ const Footer = () => {
           <Col lg="3" md="6">
             <h6 className="fw-bold">Get in Touch</h6>
 
-            <p>Address: Kharar, India</p>
-            <p> Phone: +91 9693329842 </p>
+            <p>Address: Chandigarh, India</p>
+            <p> Phone: +91 7696842820 </p>
             <p>Email: technerdacademy111@gmail.com</p>
           </Col>
         </Row>

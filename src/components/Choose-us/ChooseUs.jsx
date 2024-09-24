@@ -16,8 +16,9 @@ const ChooseUs = () => {
             <div className="choose__content">
               <h2>Why Choose Us</h2>
               <p>
-                At Technerds, we pride ourselves on delivering excellence in everything we do. Our experienced team, commitment to quality, customer-centric approach, and innovative solutions set us apart. Choosing us means choosing a partner dedicated to your success.
-              </p>
+  At Technerds, we are committed to empowering your learning journey with top-notch tech education. Our platform is built on three pillars: expert instructors, comprehensive support, and unmatched flexibility. With a focus on student satisfaction, we ensure that every course is designed and delivered by industry-leading professionals who bring real-world experience to the classroom. Whether you're learning to code, diving into AI, or exploring data science, our resources are tailored to meet your goals. With 24/7 support and a vibrant learning community, Technerds is your trusted partner for advancing your tech career. Your success is our mission.
+</p>
+
             </div>
           </Col>
 
@@ -25,7 +26,7 @@ const ChooseUs = () => {
             <div className="choose__img">
               {showVideo ? (
                 <ReactPlayer
-                  url="https://www.youtube.com/watch?v=qFp27TR4Yew"
+                  url="https://www.youtube.com/watch?v=DMkh1n_MPxw"
                   controls
                   width="100%"
                   height="350px"

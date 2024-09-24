@@ -15,12 +15,13 @@ import {
   Spinner,
 } from "reactstrap";
 import axios from "axios";
-import { FaEye, FaEyeSlash, FaUser, FaMobileAlt } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaUser, FaMobileAlt, FaUniversity } from 'react-icons/fa';
 import { AiOutlineMail, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import main_axios from "../../utilities/mainaxios";
+
 
 
 const LoginPage = () => {
@@ -102,11 +103,12 @@ const LoginPage = () => {
       setEmailError("");
       setMobileError("");
 
-      const response = await axios.post("http://localhost:4001/v1/auth/register", {
+      const response = await main_axios.post("/auth/register", {
         name,
         email,
         mobile,
         password,
+         role_id: '1'
       });
       console.log("Registration successful", response.data);
       const { tokens } = response.data;
@@ -268,12 +270,14 @@ const LoginPage = () => {
     color: '#343a40', 
   };
 
+
   return (
     <div style={pageStyle}>
       <ToastContainer />
       <div style={headerStyle}>
         <i className="ri-pantone-line" style={iconStyle}></i>
         <span style={textStyle}>Technerds</span>
+       
       </div>
       <div style={formContainerStyle}>
         <Nav tabs className="justify-content-center">
@@ -399,6 +403,32 @@ const LoginPage = () => {
                 </InputGroup>
                 {emailError && <div style={{ color: "red", marginTop: "0.5rem" }}>{emailError}</div>}
               </FormGroup>
+              <Label for="signUpEmail" style={labelStyle}>
+                  Organisation/University
+                </Label>
+                <InputGroup style={inputGroupStyle}>
+  <InputGroupText><FaUniversity /></InputGroupText> {/* Updated icon */}
+  <Input
+    type="text"
+    name="Organisation/University"
+    id="signUpOrganisation"
+    placeholder="Enter your Organisation/University"
+    style={inputStyle}
+  />
+</InputGroup>
+<Label for="signUpEmail" style={labelStyle}>
+Referrer's Name (if applicable)
+                </Label>
+<InputGroup style={inputGroupStyle}>
+  <InputGroupText><FaUser /></InputGroupText> {/* Icon for person */}
+  <Input
+    type="text"
+    name="referralName"
+    id="referralNameInput"
+    placeholder="If referred, enter the referrer's name"
+    style={inputStyle}
+  />
+</InputGroup>
               <FormGroup style={formGroupStyle}>
                 <Label for="signUpMobile" style={labelStyle}>
                   Mobile
