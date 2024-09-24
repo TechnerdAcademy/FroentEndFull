@@ -18,27 +18,27 @@ const footerQuickLinks = [
     url: "/free-course",
   },
 
-  {
-    display: "Blog",
-    url: "#",
-  },
+  // {
+  //   display: "Blog",
+  //   url: "#",
+  // },
 ];
 
 const footerInfoLinks = [
   {
     display: "Privacy Policy",
-    url: "#",
+    url: "privacy-policy",
   },
-  {
-    display: "Membership",
-    url: "#",
-  },
+  // {
+  //   display: "Membership",
+  //   url: "#",
+  // },
 
 
-  {
-    display: "Terms of Service",
-    url: "#",
-  },
+  // {
+  //   display: "Terms of Service",
+  //   url: "#",
+  // },
 ];
 
 const Footer = () => {
@@ -110,9 +110,9 @@ const Footer = () => {
           <Col lg="3" md="6">
             <h6 className="fw-bold">Get in Touch</h6>
 
-            <p>Address: Chandigarh, India</p>
-            <p> Phone: +91 7696842820 </p>
-            <p>Email: technerdacademy111@gmail.com</p>
+            <p>Address: Ropar, India</p>
+            {/* <p> Phone: +91 7696842820 </p> */}
+            <p>Email: Help@technerd.com </p>
           </Col>
         </Row>
       </Container>

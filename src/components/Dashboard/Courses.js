@@ -71,8 +71,9 @@ const CourseList = () => {
                       {course.title}
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#4a5568', marginBottom: 1 }}>
-                      <strong>Duration:</strong> {course.totalDuration}
-                    </Typography>
+  <strong>Duration:</strong> {course.totalDuration} Days
+</Typography>
+
                     <Typography variant="body2" sx={{ color: '#4a5568', marginBottom: 1 }}>
                       <strong>Category:</strong> {course.category}
                     </Typography>

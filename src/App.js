@@ -55,6 +55,10 @@ const MyCourse  = loadable(() => import("./components/Dashboard/mycourse"), {
   fallback: <Loader />,
 })
 
+const PrivacrPolicy  = loadable(() => import("./components/PrivacyPolicy/index.js"), {
+  fallback: <Loader />,
+})
+
 const LayoutWithHeaderFooter = ({ children }) => (
   <>
     <Header />
@@ -79,6 +83,7 @@ function App() {
         <Route path="/login" element={<LayoutWithHeaderFooter><LoginModal /></LayoutWithHeaderFooter>} />
         <Route path="/description/:courseId" element={<LayoutWithHeaderFooter><Description /></LayoutWithHeaderFooter>} />
         <Route path="/business-package" element={<LayoutWithHeaderFooter><Buisnesspackage/></LayoutWithHeaderFooter>} />
+        <Route path="/privacy-policy" element={<LayoutWithHeaderFooter><PrivacrPolicy /></LayoutWithHeaderFooter>} />  // Add privacy policy route here
 
       
         <Route path="/dashboard" element={<DashboardLayout />}>
