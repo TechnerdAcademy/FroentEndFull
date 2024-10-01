@@ -14,9 +14,20 @@ const CourseDescription = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const userData = JSON.parse(localStorage.getItem('user'));
+  const userId = userData.id;
 
 
- 
+  const loadRazorpayScript = () => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return new Promise((resolve) => {
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+    });
+  };
 
   const fetchCourseDetails = async () => {
     try {
@@ -30,23 +41,61 @@ const CourseDescription = () => {
   };
 
   const handlePurchaseCourse = async (courseId, type) => {
-
-     
+    // Load Razorpay Script
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const userId = userData.id;
+    const mobileNumber = userData.mobile;
+    const isScriptLoaded = await loadRazorpayScript();
+    if (!isScriptLoaded) {
+      alert('Failed to load Razorpay script. Please try again.');
+      return;
+    }
   
-      
-        try {
-          const response = await main_axios.post(`/courses/purchases/`, { courseId, type:type });
-          console.log('Purchased course:', response.data);
+    try {
+      // Create an order by calling the backend API
+      const response = await main_axios.post('/payment/create-order', { userId, amount: course.discountedPrice , paymentMethod : "rejerpay" });
+      const { order_id } = response.data; // This assumes `order_id` is returned by your backend
+  
+      // Razorpay Options
+      const options = {
+        key: "rzp_live_JKBHNOoo7yeDnK", // Replace with your Razorpay key ID
+        amount: course.discountedPrice * 100, // Amount in paisa
+        currency: "INR",
+        name: "Technerds",
+        description: course.title,
+        image: course.imageUrl,
+        order_id: order_id, // Razorpay order ID from the backend
+        handler: async function (response) {
+          alert('Payment successful!');
+  
+          // Send payment success details to the backend
+          await main_axios.post('/courses/purchases/', { courseId, type });
+  
           setSnackbarMessage('Course purchased successfully!');
           setSnackbarSeverity('success');
           setSnackbarOpen(true);
+  
+          // Refetch course details after purchase
           fetchCourseDetails();
-        } catch (error) {
-          console.error('Error purchasing course:', error);
-          setSnackbarMessage('Error purchasing course. Please try again.');
-          setSnackbarSeverity('error');
-          setSnackbarOpen(true);
-        }
+        },
+        prefill: {
+          name: "", // Replace with actual user data
+          email: "",
+          contact: userData.mobile,
+        },
+        theme: {
+          color: "#ff7043",
+        },
+      };
+  
+      const razorpayInstance = new window.Razorpay(options);
+      razorpayInstance.open();
+    } catch (error) {
+      console.error('Error purchasing course:', error);
+      setSnackbarMessage('Error purchasing course. Please try again.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
   };
   
 
@@ -55,9 +104,11 @@ const CourseDescription = () => {
       fetchCourseDetails();
     }
   }, [courseId]);
+
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
+
 
 
   if (loading) {
