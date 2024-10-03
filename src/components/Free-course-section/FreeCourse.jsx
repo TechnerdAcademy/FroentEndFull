@@ -49,7 +49,7 @@ const CourseList = () => {
                     </Typography>
                  
                     <Typography variant="body2" sx={{ color: '#666', marginBottom: 1 }}>
-                      <strong>Duration:</strong> {course.totalDuration}
+                      <strong>Duration:</strong> {course.totalDuration} Days
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#666', marginBottom: 1 }}>
                       <strong>Category:</strong> {course.category}

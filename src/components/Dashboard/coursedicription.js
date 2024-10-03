@@ -53,7 +53,7 @@ const CourseDescription = () => {
   
     try {
       // Create an order by calling the backend API
-      const response = await main_axios.post('/payment/create-order', { userId, amount: course.discountedPrice , paymentMethod : "rejerpay" });
+      const response = await main_axios.post('/payment/create-order', { userId, amount: course.discountedPrice, paymentMethod: 'razorpay' });
       const { order_id } = response.data; // This assumes `order_id` is returned by your backend
   
       // Razorpay Options
@@ -66,22 +66,41 @@ const CourseDescription = () => {
         image: course.imageUrl,
         order_id: order_id, // Razorpay order ID from the backend
         handler: async function (response) {
-          alert('Payment successful!');
+          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
   
-          // Send payment success details to the backend
-          await main_axios.post('/courses/purchases/', { courseId, type });
+          // Additional data to be sent to the backend
+          const paymentData = {
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature,
+            status: 'paid', // Set the payment status
+            paymentId: razorpay_payment_id, // Store the payment ID
+            paidAt: Date.now(), // Timestamp of payment
+            courseId, // Include the course ID
+            type // Include the type (course type, etc.)
+          };
   
-          setSnackbarMessage('Course purchased successfully!');
-          setSnackbarSeverity('success');
-          setSnackbarOpen(true);
+          // Send payment verification details along with additional fields to the backend
+          try {
+            await main_axios.post('/payment/verify-payment', paymentData);
   
-          // Refetch course details after purchase
-          fetchCourseDetails();
+            setSnackbarMessage('Course purchased successfully!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+  
+            // Refetch course details after purchase
+            fetchCourseDetails();
+          } catch (error) {
+            console.error('Error verifying payment:', error);
+            setSnackbarMessage('Payment verification failed. Please contact support.');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+          }
         },
         prefill: {
-          name: "", // Replace with actual user data
-          email: "",
-          contact: userData.mobile,
+          name: userData.name, // Replace with actual user data
+          email: userData.email,
+          contact: mobileNumber,
         },
         theme: {
           color: "#ff7043",
@@ -97,6 +116,7 @@ const CourseDescription = () => {
       setSnackbarOpen(true);
     }
   };
+  
   
 
   useEffect(() => {
@@ -151,7 +171,7 @@ const CourseDescription = () => {
 
   {/* Left Side */}
   <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 3 }}>
-  <Chip
+  {/* <Chip
     
         label={`${Math.round(((course.price - course.discountedPrice) / course.price) * 100)}% OFF`}
         color="secondary"
@@ -163,7 +183,7 @@ const CourseDescription = () => {
           backgroundColor: '#17bf9e',
           color: '#fff',
         }}
-      />
+      /> */}
 
     <Avatar
       src={course.imageUrl}
@@ -214,7 +234,7 @@ const CourseDescription = () => {
 
   {/* Right Side */}
   <Box sx={{ flex: 1, p: 3 }}>
-  <Chip
+  {/* <Chip
   label="Enroll for Demo"
   onClick={() => handlePurchaseCourse(courseId, 'demo')}
   sx={{ 
@@ -227,7 +247,7 @@ const CourseDescription = () => {
     color: "#fff",
     padding: "12px",
   }}
-/>
+/> */}
     <br></br>
     
     <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: "#fff" }}>
@@ -301,7 +321,7 @@ const CourseDescription = () => {
       </Typography>
 
       <Typography variant="body1" sx={{ mb: 2 }}>
-        <strong>Learning Hours:</strong> Gain {item.hoursOfLearning} hours of comprehensive learning.
+        <strong>Learning Days:</strong> Gain {item.hoursOfLearning}+ Days of comprehensive learning.
       </Typography>
 
       <Typography variant="body1" sx={{ mb: 2 }}>

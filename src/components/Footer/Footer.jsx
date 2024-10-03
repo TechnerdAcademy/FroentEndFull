@@ -51,7 +51,7 @@ const Footer = () => {
               <i class="ri-pantone-line"></i> Technerds
             </h2>
 
-            <div className="follows">
+            {/* <div className="follows">
               <p className="mb-0">Follow us on social media</p>
               <span>
                 {" "}
@@ -80,7 +80,7 @@ const Footer = () => {
                   <i class="ri-twitter-line"></i>
                 </a>
               </span>
-            </div>
+            </div> */}
           </Col>
 
           <Col lg="3" md="6" className="mb-4">

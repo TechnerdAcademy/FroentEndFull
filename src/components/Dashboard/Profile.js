@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, Avatar, IconButton, Typography, Grid, Divider, Box, TextField, Button, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -18,10 +18,13 @@ function ProfileCard() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [retypeNewPassword, setRetypeNewPassword] = useState('');
-  const [institution, setInstitution] = useState('Chandigarh University (CU)');
-  const [language, setLanguage] = useState('C++');
-  const [subscription, setSubscription] = useState('Premium Plan');
-  const [paymentMode, setPaymentMode] = useState('Credit Card');
+  
+  // Load initial values from localStorage (if available)
+  const [institution, setInstitution] = useState(localStorage.getItem('institution') || '');
+  const [language, setLanguage] = useState(localStorage.getItem('language') || '');
+  
+  const [subscription] = useState('Premium Plan');
+  const [paymentMode] = useState('Credit Card');
 
   const navigate = useNavigate();
 
@@ -75,23 +78,22 @@ function ProfileCard() {
       Swal.fire('Error', 'Passwords do not match', 'error');
       return;
     }
-  
-    // Retrieve user object from local storage
+
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user ? user.id : null;
-  
+
     if (!userId) {
       Swal.fire('Error', 'User ID not found', 'error');
       return;
     }
-  
+
     try {
       const response = await main_axios.put('/auth/changePassword', {
-        userId,            
+        userId,
         oldPassword: currentPassword,
         newPassword
       });
-  
+
       if (response.status === 200) {
         Swal.fire('Password Changed!', 'Your password has been updated.', 'success');
         setCurrentPassword('');
@@ -99,13 +101,24 @@ function ProfileCard() {
         setRetypeNewPassword('');
       }
     } catch (error) {
-      
       const errorMessage = error.response?.data?.message || 'Failed to change password';
       Swal.fire('Error', errorMessage, 'error');
     }
   };
-  
-  
+
+  // Handle updating institution and saving to local storage
+  const handleInstitutionChange = (e) => {
+    const newInstitution = e.target.value;
+    setInstitution(newInstitution);
+    localStorage.setItem('institution', newInstitution);
+  };
+
+  // Handle updating language and saving to local storage
+  const handleLanguageChange = (e) => {
+    const newLanguage = e.target.value;
+    setLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+  };
 
   const renderContent = () => {
     switch (currentTab) {
@@ -119,15 +132,8 @@ function ProfileCard() {
                   fullWidth
                   variant="outlined"
                   size="small"
-                  value={institution}
-                  onChange={(e) => setInstitution(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton onClick={() => setInstitution(institution)}>
-                        <EditIcon />
-                      </IconButton>
-                    )
-                  }}
+                  value={institution} // Initially empty
+                  onChange={handleInstitutionChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -136,27 +142,20 @@ function ProfileCard() {
                   fullWidth
                   variant="outlined"
                   size="small"
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton onClick={() => setLanguage(language)}>
-                        <EditIcon />
-                      </IconButton>
-                    )
-                  }}
+                  value={language} // Initially empty
+                  onChange={handleLanguageChange}
                 />
               </Grid>
             </Grid>
             <Divider sx={{ marginY: 2 }} />
-            <Typography variant="subtitle1">Courses Enrolled</Typography>
-            <Typography variant="body2">
+            {/* <Typography variant="subtitle1">Courses Enrolled</Typography> */}
+            {/* <Typography variant="body2">
               <ul>
                 {coursesEnrolled.map((course, index) => (
                   <li key={index}>{course}</li>
                 ))}
               </ul>
-            </Typography>
+            </Typography> */}
             <Divider sx={{ marginY: 2 }} />
           </CardContent>
         );

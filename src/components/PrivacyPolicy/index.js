@@ -105,13 +105,16 @@ const styles = {
         backgroundColor: '#fff',
         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
         fontFamily: 'Arial, sans-serif',
+        fontSize: '16px',
         lineHeight: '1.6',
     },
     heading: {
         textAlign: 'center',
+        fontSize: '24px',
     },
     subheadingLeft: {
         textAlign: 'left',
+        fontSize: '20px',
     },
     section: {
         marginBottom: '40px',
