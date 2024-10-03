@@ -1,22 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, Card, CardContent, Avatar, Divider, CircularProgress, Grid, Chip, AccordionSummary, Accordion, AccordionDetails, Rating ,Snackbar, Alert, List, ListItemText, ListItem } from "@mui/material";
-import { useParams } from 'react-router-dom';
-import main_axios from '../../utilities/mainaxios';
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  Avatar,
+  Divider,
+  CircularProgress,
+  Grid,
+  Chip,
+  AccordionSummary,
+  Accordion,
+  AccordionDetails,
+  Rating,
+  Snackbar,
+  Alert,
+  List,
+  ListItemText,
+  ListItem,
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+import main_axios from "../../utilities/mainaxios";
+import WorkIcon from "@mui/icons-material/Work";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import CodeIcon from "@mui/icons-material/Code";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const CourseDescription = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState({});
   const [loading, setLoading] = useState(true);
-  const [purchaseType, setPurchaseType] = useState('regular');
+  const [purchaseType, setPurchaseType] = useState("regular");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  const userData = JSON.parse(localStorage.getItem('user'));
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const userData = JSON.parse(localStorage.getItem("user"));
   const userId = userData.id;
-
 
   const loadRazorpayScript = () => {
     const script = document.createElement("script");
@@ -34,7 +58,7 @@ const CourseDescription = () => {
       const response = await main_axios.get(`/courses/${courseId}`);
       setCourse(response.data);
     } catch (error) {
-      console.error('Error fetching course details:', error);
+      console.error("Error fetching course details:", error);
     } finally {
       setLoading(false);
     }
@@ -42,20 +66,24 @@ const CourseDescription = () => {
 
   const handlePurchaseCourse = async (courseId, type) => {
     // Load Razorpay Script
-    const userData = JSON.parse(localStorage.getItem('user'));
+    const userData = JSON.parse(localStorage.getItem("user"));
     const userId = userData.id;
     const mobileNumber = userData.mobile;
     const isScriptLoaded = await loadRazorpayScript();
     if (!isScriptLoaded) {
-      alert('Failed to load Razorpay script. Please try again.');
+      alert("Failed to load Razorpay script. Please try again.");
       return;
     }
-  
+
     try {
       // Create an order by calling the backend API
-      const response = await main_axios.post('/payment/create-order', { userId, amount: course.discountedPrice, paymentMethod: 'razorpay' });
+      const response = await main_axios.post("/payment/create-order", {
+        userId,
+        amount: course.discountedPrice,
+        paymentMethod: "razorpay",
+      });
       const { order_id } = response.data; // This assumes `order_id` is returned by your backend
-  
+
       // Razorpay Options
       const options = {
         key: "rzp_live_JKBHNOoo7yeDnK", // Replace with your Razorpay key ID
@@ -66,34 +94,38 @@ const CourseDescription = () => {
         image: course.imageUrl,
         order_id: order_id, // Razorpay order ID from the backend
         handler: async function (response) {
-          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
-  
+          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+            response;
+
           // Additional data to be sent to the backend
           const paymentData = {
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature,
-            status: 'paid', // Set the payment status
+            status: "paid", // Set the payment status
             paymentId: razorpay_payment_id, // Store the payment ID
             paidAt: Date.now(), // Timestamp of payment
             courseId, // Include the course ID
-            type // Include the type (course type, etc.)
+            type, // Include the type (course type, etc.)
           };
-  
+
           // Send payment verification details along with additional fields to the backend
           try {
-            await main_axios.post('/payment/verify-payment', paymentData);
-  
-            setSnackbarMessage('Course purchased successfully!');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-  
+            await main_axios.post("/payment/verify-payment", paymentData);
+
+            setSnackbarMessage("Course purchased successfully!");
+            setSnackbarSeverity("success");
+            setSnackbarOpen(true)
+            const response = await main_axios.post(`/courses/purchases/`, { courseId, type:type });
+
             // Refetch course details after purchase
             fetchCourseDetails();
           } catch (error) {
-            console.error('Error verifying payment:', error);
-            setSnackbarMessage('Payment verification failed. Please contact support.');
-            setSnackbarSeverity('error');
+            console.error("Error verifying payment:", error);
+            setSnackbarMessage(
+              "Payment verification failed. Please contact support."
+            );
+            setSnackbarSeverity("error");
             setSnackbarOpen(true);
           }
         },
@@ -106,18 +138,16 @@ const CourseDescription = () => {
           color: "#ff7043",
         },
       };
-  
+
       const razorpayInstance = new window.Razorpay(options);
       razorpayInstance.open();
     } catch (error) {
-      console.error('Error purchasing course:', error);
-      setSnackbarMessage('Error purchasing course. Please try again.');
-      setSnackbarSeverity('error');
+      console.error("Error purchasing course:", error);
+      setSnackbarMessage("Error purchasing course. Please try again.");
+      setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
   };
-  
-  
 
   useEffect(() => {
     if (courseId) {
@@ -129,11 +159,16 @@ const CourseDescription = () => {
     setSnackbarOpen(false);
   };
 
-
-
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh',  }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -142,7 +177,7 @@ const CourseDescription = () => {
   if (!course) {
     return (
       <Box sx={{ padding: 4, backgroundColor: "#fffcf7", minHeight: "100vh" }}>
-        <Typography variant="h6" sx={{ color: "#e57373", textAlign: 'center' }}>
+        <Typography variant="h6" sx={{ color: "#e57373", textAlign: "center" }}>
           Course not found
         </Typography>
       </Box>
@@ -152,26 +187,42 @@ const CourseDescription = () => {
   return (
     <Box sx={{ padding: 4, minHeight: "100vh" }}>
       <Grid container spacing={2}>
-        
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        action={
-          <Button color="inherit" onClick={handleCloseSnackbar}>
-            Close
-          </Button>
-        }
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-      <Box sx={{ display: 'flex', border: '2px dotted #ff7043', borderRadius: 2, overflow: 'hidden', backgroundColor: "#0b0b0acf", position: 'relative' }}>
-
-  {/* Left Side */}
-  <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 3 }}>
-  {/* <Chip
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          action={
+            <Button color="inherit" onClick={handleCloseSnackbar}>
+              Close
+            </Button>
+          }
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+        <Box
+          sx={{
+            display: "flex",
+            border: "2px dotted #ff7043",
+            borderRadius: 2,
+            overflow: "hidden",
+            backgroundColor: "#0b0b0acf",
+            position: "relative",
+          }}
+        >
+          {/* Left Side */}
+          <Box
+            sx={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              p: 3,
+            }}
+          >
+            {/* <Chip
     
         label={`${Math.round(((course.price - course.discountedPrice) / course.price) * 100)}% OFF`}
         color="secondary"
@@ -185,56 +236,59 @@ const CourseDescription = () => {
         }}
       /> */}
 
-    <Avatar
-      src={course.imageUrl}
-      variant="rounded"
-      sx={{
-        width: '60%',
-        height: 'auto',
-        borderRadius: 4,
-        mb: 2
-      }}
-    />
-<Button
-  variant="contained"
-  sx={{
-    backgroundColor: "#ff7043",
-    color: "#fff",
-    padding: "12px 36px",
-    fontSize: "18px",
-    fontWeight: "bold",
-    borderRadius: "30px",
-    fontSize: '1.25rem',
-    padding: '10px 16px',
-    '& .MuiChip-label': {
-      fontSize: '1.25rem', 
-    },
+            <Avatar
+              src={course.imageUrl}
+              variant="rounded"
+              sx={{
+                width: "60%",
+                height: "auto",
+                borderRadius: 4,
+                mb: 2,
+              }}
+            />
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#ff7043",
+                color: "#fff",
+                padding: "12px 36px",
+                fontSize: "18px",
+                fontWeight: "bold",
+                borderRadius: "30px",
+                fontSize: "1.25rem",
+                padding: "10px 16px",
+                "& .MuiChip-label": {
+                  fontSize: "1.25rem",
+                },
 
-    textTransform: "none",
-    
-   
-    "&:hover": { backgroundColor: "#f4511e" },
-    mb: 2
-  }}
-  onClick={() => handlePurchaseCourse(courseId, 'regular')}
->
-  {`Enroll Now -  ₹${course.discountedPrice}`}
-</Button>
+                textTransform: "none",
 
-    <Box sx={{ display: 'flex', alignItems: 'center', color: "#f7e9e9" }}>
-      <Typography variant="body2" sx={{ mr: 1, color: "#f7e9e9" }}>Rating:</Typography>
-      <Rating
-        value={4.3}
-        precision={0.5}
-        readOnly
-        sx={{ fontSize: 18, color: '#17bf9e' }}
-      />
-    </Box>
-  </Box>
+                "&:hover": { backgroundColor: "#f4511e" },
+                mb: 2,
+              }}
+              onClick={() => handlePurchaseCourse(courseId, "regular")}
+            >
+              {`Enroll Now -  ₹${course.discountedPrice}`}
+            </Button>
 
-  {/* Right Side */}
-  <Box sx={{ flex: 1, p: 3 }}>
-  {/* <Chip
+            <Box
+              sx={{ display: "flex", alignItems: "center", color: "#f7e9e9" }}
+            >
+              <Typography variant="body2" sx={{ mr: 1, color: "#f7e9e9" }}>
+                Rating:
+              </Typography>
+              <Rating
+                value={4.3}
+                precision={0.5}
+                readOnly
+                sx={{ fontSize: 18, color: "#17bf9e" }}
+              />
+            </Box>
+          </Box>
+
+          {/* Right Side */}
+          <Box sx={{ flex: 1, p: 3 }}>
+            {/* <Chip
   label="Enroll for Demo"
   onClick={() => handlePurchaseCourse(courseId, 'demo')}
   sx={{ 
@@ -248,125 +302,313 @@ const CourseDescription = () => {
     padding: "12px",
   }}
 /> */}
-    <br></br>
-    
-    <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2, color: "#fff" }}>
-      {course.title}
-    </Typography>
-    <Typography variant="body1" sx={{ mb: 2, color: "#f7e9e9", textAlign: 'justify' }}>
-      {course.description}
-    </Typography>
-    {/* Add more course details here */}
-  </Box>
-</Box>
+            <br></br>
+
+            <Typography
+              variant="h3"
+              sx={{ fontWeight: "bold", mb: 2, color: "#fff" }}
+            >
+              {course.title}
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ mb: 2, color: "#f7e9e9", textAlign: "justify" }}
+            >
+              {course.description}
+            </Typography>
+            {/* Add more course details here */}
+          </Box>
+        </Box>
 
         {/* Course Details */}
         <Grid item xs={12} md={6}>
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: "#333" }}>
+          <Box
+            sx={{
+              mb: 4,
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
+              padding: "24px",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                mb: 3,
+                color: "#1a237e",
+                borderBottom: "2px solid #1a237e",
+                paddingBottom: "8px",
+              }}
+            >
               What you'll learn
             </Typography>
-            <Box component="ul" sx={{ pl: 3, listStyleType: 'disc', color: "#6a1b9a" }}>
-              {course.whatYouLearn && course.whatYouLearn.map((item, index) => (
-                <li key={index} sx ={{textAlign:'justify'}}>
-                  <Typography variant="body1" sx={{ mb: 1  ,textAlign:'justify'}}>{item}</Typography>
-                </li>
-              ))}
+            <Box component="ul" sx={{ pl: 3, listStyleType: "none" }}>
+              {course.whatYouLearn &&
+                course.whatYouLearn.map((item, index) => (
+                  <li
+                    key={index}
+                    sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                  >
+                    <CheckCircleOutlineIcon sx={{ color: "#4caf50", mr: 2 }} />
+                    <Typography variant="body1" sx={{ textAlign: "justify" }}>
+                      {item}
+                    </Typography>
+                  </li>
+                ))}
             </Box>
 
-            <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: "#333" }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                mb: 3,
+                mt: 4,
+                color: "#1a237e",
+                borderBottom: "2px solid #1a237e",
+                paddingBottom: "8px",
+              }}
+            >
               Course Objective
             </Typography>
-            <Box component="ul" sx={{ pl: 3, listStyleType: 'disc', color: "#333" }}>
-              {course.objective && course.objective.map((obj, index) => (
-                <li key={index}>
-                  <Typography variant="body1" sx={{ mb: 1 ,textAlign:'justify' }}>{obj}</Typography>
-                </li>
-              ))}
+            <Box component="ul" sx={{ pl: 3, listStyleType: "none" }}>
+              {course.objective &&
+                course.objective.map((obj, index) => (
+                  <li
+                    key={index}
+                    sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                  >
+                    <ArrowRightIcon sx={{ color: "#1a237e", mr: 2 }} />
+                    <Typography variant="body1" sx={{ textAlign: "justify" }}>
+                      {obj}
+                    </Typography>
+                  </li>
+                ))}
             </Box>
 
-            <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: "#333" }}>
-              Projects
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                mb: 3,
+                mt: 4,
+                color: "#1a237e",
+                borderBottom: "2px solid #1a237e",
+                paddingBottom: "8px",
+              }}
+            >
+              Projects ({course.projects ? course.projects.length : 0})
             </Typography>
-            <Box component="ul" sx={{ pl: 3, listStyleType: 'disc', color: "#2e7d32" }}>
-              {course.projects && course.projects.map((obj, index) => (
-                <li key={index}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>{obj}</Typography>
-                </li>
-              ))}
+            <Box component="ul" sx={{ pl: 3, listStyleType: "none" }}>
+              {course.projects &&
+                course.projects.map((obj, index) => (
+                  <li
+                    key={index}
+                    sx={{ display: "flex", alignItems: "center", mb: 2 }}
+                  >
+                    <CodeIcon sx={{ color: "#2e7d32", mr: 2 }} />
+                    <Typography variant="body1" sx={{ display: "inline" }}>
+                      {obj}
+                    </Typography>
+                  </li>
+                ))}
             </Box>
           </Box>
         </Grid>
-
         <Grid item xs={12} md={6}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', mt: 4 }}>
-  <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3, color: "#333" }}>
-  Unlock Premium Course Features
-  </Typography>
-  {course.Included && course.Included.map((item, index) => (
-    <Box
-      key={item._id}
-      sx={{
-        width: '100%',
-        backgroundColor: '#f9f9f9',
-        borderRadius: '8px',
-        p: 3,
-        mb: 3,
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)'
-      }}
-    >
-      <Typography variant="h6" sx={{ color: '#00796b', fontWeight: 'bold', mb: 2 }}>
-        {`You Will Receive a ${item.certification}`}
-      </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              borderRadius: "16px",
+              padding: "32px",
+              mt: 4,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+                mt: 4,
+              }}
+            >
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: "bold",
+                  mb: 3,
+                  color: "#1b5e20",
+                  textAlign: "center",
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
+                }}
+              >
+                Unlock Premium Course Features
+              </Typography>
+              {course.Included &&
+                course.Included.map((item, index) => (
+                  <Box
+                    key={item._id}
+                    sx={{
+                      width: "100%",
+                      borderRadius: "12px",
+                      p: 3,
+                      mb: 3,
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: "#00695c",
+                        fontWeight: "bold",
+                        mb: 2,
+                        borderBottom: "2px solid #00695c",
+                        paddingBottom: "8px",
+                      }}
+                    >
+                      {`You Will Receive a ${item.certification}`}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{ mb: 2, display: "flex", alignItems: "center" }}
+                    >
+                      <AccessTimeIcon sx={{ mr: 1, color: "#4caf50" }} />
+                      <strong>Learning Days:</strong> Gain{" "}
+                      {item.hoursOfLearning}+ Days of comprehensive learning.
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{ mb: 2, display: "flex", alignItems: "center" }}
+                    >
+                      <WorkIcon sx={{ mr: 1, color: "#2196f3" }} />
+                      <strong>Internship Opportunity:</strong>{" "}
+                      {item.internshipOpportunity
+                        ? "Yes, included! You will get a chance to gain real-world experience and enhance your skills."
+                        : "Unfortunately, not included."}
+                    </Typography>
 
-      <Typography variant="body1" sx={{ mb: 2 }}>
-        <strong>Learning Days:</strong> Gain {item.hoursOfLearning}+ Days of comprehensive learning.
-      </Typography>
+                    {item.resources.map((resource, idx) => (
+                      <ListItem key={idx} sx={{ pl: 0 }}>
+                        <ListItemIcon>
+                          <CheckCircleOutlineIcon sx={{ color: "#4caf50" }} />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={resource}
+                          sx={{
+                            "& .MuiListItemText-primary": { fontWeight: 500 },
+                          }}
+                        />
+                      </ListItem>
+                    ))}
 
-      <Typography variant="body1" sx={{ mb: 2 }}>
-      <strong>Internship Opportunity:</strong> {item.internshipOpportunity ? 
-        'Yes, included! You will get a chance to gain real-world experience and enhance your skills.' : 
-        'Unfortunately, not included.'
-      }
-    </Typography>
+                    {index !== course.Included.length - 1 && (
+                      <Divider sx={{ mt: 3 }} />
+                    )}
+                  </Box>
+                ))}
+            </Box>
+          </Box>
 
-        {item.resources.map((resource, idx) => (
-          <ListItem key={idx} >
-            <ListItemText primary={resource} />
-          </ListItem>
-        ))}
-   
-
-      {index !== course.Included.length - 1 && <Divider sx={{ mt: 3 }} />}
-    </Box>
-  ))}
-</Box>
-
-
-            <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, color: "#333" }}>
+          {/* Separate Div for Course Content */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              backgroundColor: "#f9f9f9",
+              borderRadius: "16px",
+              padding: "32px",
+              mt: 4,
+              border: "1px solid #e0e0e0",
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: "bold",
+                mb: 3,
+                color: "#1a5f7a",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+              }}
+            >
               Course Content
             </Typography>
-            {course.CourseContent && course.CourseContent.map((week, index) => (
-              <Accordion key={week._id} sx={{ mb: 2, backgroundColor: "#f8f9fb" }}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#ff7043" }} />}>
-                  <Typography variant="h6" sx={{ fontWeight: "bold", color: "#333" }}>Week {week.weekNumber}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {week.days.map((day, dayIndex) => (
-                    <Box key={day._id} sx={{ mb: 2 }}>
-                      <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1, color: "#ab47bc" }}>{day.day}</Typography>
-                      {day.topics.map((topic, topicIndex) => (
-                        <Box key={topicIndex} sx={{ ml: 3, mb: 1 }}>
-                          <Typography variant="body2" sx={{ fontWeight: "bold", color: "#8e24aa" }}>{topic.title}</Typography>
-                          <Typography variant="body2" sx={{ color: "#777" }}>{topic.description}</Typography>
-                        </Box>
-                      ))}
-                    </Box>
-                  ))}
-                </AccordionDetails>
-              </Accordion>
-            ))}
+            {course.CourseContent &&
+              course.CourseContent.map((week, index) => (
+                <Accordion
+                  key={week._id}
+                  sx={{
+                    mb: 2,
+                    backgroundColor: "#ffffff",
+                    width: "100%",
+                    "&:before": {
+                      display: "none",
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon sx={{ color: "#1a5f7a" }} />}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#f0f7fa",
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", color: "#1a5f7a" }}
+                    >
+                      Week {week.weekNumber}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ backgroundColor: "#fafafa" }}>
+                    {week.days.map((day, dayIndex) => (
+                      <Box key={day._id} sx={{ mb: 3 }}>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontWeight: "bold",
+                            mb: 1,
+                            color: "#2c3e50",
+                            borderBottom: "2px solid #3498db",
+                            display: "inline-block",
+                          }}
+                        >
+                          {day.day}
+                        </Typography>
+                        {day.topics.map((topic, topicIndex) => (
+                          <Box key={topicIndex} sx={{ ml: 3, mb: 2 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                fontWeight: "bold",
+                                color: "#34495e",
+                                mb: 0.5,
+                              }}
+                            >
+                              {topic.title}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "#7f8c8d",
+                                pl: 2,
+                                borderLeft: "2px solid #bdc3c7",
+                              }}
+                            >
+                              {topic.description}
+                            </Typography>
+                          </Box>
+                        ))}
+                      </Box>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+              ))}
           </Box>
         </Grid>
       </Grid>
@@ -376,7 +618,10 @@ const CourseDescription = () => {
       {/* Free Courses Section */}
       {course.freeCourses && course.freeCourses.length > 0 && (
         <Box sx={{ mt: 4 }}>
-          <Typography variant="h4" sx={{ fontWeight: "bold", mb: 3, color: "#333" }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: "bold", mb: 3, color: "#333" }}
+          >
             Included Free Courses
           </Typography>
           <Grid container spacing={4}>
@@ -387,22 +632,40 @@ const CourseDescription = () => {
                     borderRadius: 4,
                     boxShadow: "0px 6px 20px rgba(255, 183, 77, 0.3)",
                     position: "relative",
-                    "&:hover": { transform: "scale(1.02)", boxShadow: "0px 12px 30px rgba(255, 87, 34, 0.4)" },
+                    "&:hover": {
+                      transform: "scale(1.02)",
+                      boxShadow: "0px 12px 30px rgba(255, 87, 34, 0.4)",
+                    },
                     transition: "transform 0.2s, box-shadow 0.2s",
                   }}
                 >
                   <Chip
                     label="Free"
                     color="primary"
-                    sx={{ position: "absolute", top: 10, right: 10, fontWeight: "bold", fontSize: 12, backgroundColor: "#4caf50" }}
+                    sx={{
+                      position: "absolute",
+                      top: 10,
+                      right: 10,
+                      fontWeight: "bold",
+                      fontSize: 12,
+                      backgroundColor: "#4caf50",
+                    }}
                   />
                   <Avatar
                     src={freeCourse.imageUrl}
                     variant="rounded"
-                    sx={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: 4 }}
+                    sx={{
+                      width: "100%",
+                      height: "200px",
+                      objectFit: "cover",
+                      borderRadius: 4,
+                    }}
                   />
                   <CardContent>
-                    <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, color: "#ff7043" }}>
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", mb: 1, color: "#ff7043" }}
+                    >
                       {freeCourse.title}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "#555" }}>
@@ -419,7 +682,6 @@ const CourseDescription = () => {
         </Box>
       )}
     </Box>
-   
   );
 };
 
