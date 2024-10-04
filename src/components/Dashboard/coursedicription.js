@@ -126,7 +126,15 @@ const CourseDescription = () => {
               courseId,
               type: type,
             });
-
+            
+            if (referralCode) {
+              console.log("Referral code applied successfully!");
+              await main_axios.put("/referral/increase", { code: referralCode });
+              setSnackbarMessage("Referral code applied successfully!");
+              setSnackbarSeverity("success");
+              setSnackbarOpen(true);
+              console.log("Referral code applied successfully!");
+            }
             // Refetch course details after purchase
             fetchCourseDetails();
           } catch (error) {
@@ -365,18 +373,18 @@ const CourseDescription = () => {
               onClick={async () => {
                 try {
                   const response = await main_axios.post(
-                    "/validate-referral-code",
-                    { referralCode }
-                  );
-                  if (response.data.isValid) {
-                    setSnackbarMessage("Referral code applied successfully!");
-                    setSnackbarSeverity("success");
-                  } else {
-                    setSnackbarMessage(
-                      "Invalid referral code. Please try again."
-                    );
-                    setSnackbarSeverity("error");
-                  }
+                    "/referral/validate",
+                    { code: referralCode }  // sending the referralCode in the request body
+                );
+                
+                
+                if (response.data.status === "success" && response.data.data.isValid) {
+                  setSnackbarMessage("Referral code applied successfully!");
+                  setSnackbarSeverity("success");
+                } else {
+                  setSnackbarMessage("Invalid referral code. Please try again.");
+                  setSnackbarSeverity("error");
+                }
                 } catch (error) {
                   console.error("Error validating referral code:", error);
                   setSnackbarMessage(
