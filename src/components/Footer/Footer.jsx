@@ -112,7 +112,7 @@ const Footer = () => {
 
             <p>Address: Ropar, India</p>
             <p> Phone: +91 7696842820 </p>
-            <p>Email: Help@technerd.com </p>
+            <p>Email: technerdacademy111@gmail.com</p>
           </Col>
         </Row>
       </Container>
