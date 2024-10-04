@@ -21,6 +21,8 @@ import {
   ListItem,
   TextField,
 } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+
 import { useParams } from "react-router-dom";
 import main_axios from "../../utilities/mainaxios";
 import WorkIcon from "@mui/icons-material/Work";
@@ -47,6 +49,9 @@ const CourseDescription = () => {
   const [couponApplied, setCouponApplied] = useState(false);
   const userData = JSON.parse(localStorage.getItem("user"));
   const userId = userData.id;
+
+  const navigate = useNavigate();
+
 
   const loadRazorpayScript = () => {
     const script = document.createElement("script");
@@ -137,6 +142,7 @@ const CourseDescription = () => {
             }
             // Refetch course details after purchase
             fetchCourseDetails();
+            navigate("/dashboard/mycourses");
           } catch (error) {
             console.error("Error verifying payment:", error);
             setSnackbarMessage(
@@ -249,30 +255,32 @@ const CourseDescription = () => {
                 mb: 2,
               }}
             />
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#ff7043",
-                color: "#fff",
-                padding: "12px 36px",
-                fontSize: "18px",
-                fontWeight: "bold",
-                borderRadius: "30px",
-                fontSize: "1.25rem",
-                padding: "10px 16px",
-                "& .MuiChip-label": {
+            {course.openforenrol && (
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#ff7043",
+                  color: "#fff",
+                  padding: "12px 36px",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  borderRadius: "30px",
                   fontSize: "1.25rem",
-                },
+                  padding: "10px 16px",
+                  "& .MuiChip-label": {
+                    fontSize: "1.25rem",
+                  },
 
-                textTransform: "none",
+                  textTransform: "none",
 
-                "&:hover": { backgroundColor: "#f4511e" },
-                mb: 2,
-              }}
-              onClick={() => handlePurchaseCourse(courseId, "regular")}
-            >
-              {`Enroll Now -  ₹${course.discountedPrice}`}
-            </Button>
+                  "&:hover": { backgroundColor: "#f4511e" },
+                  mb: 2,
+                }}
+                onClick={() => handlePurchaseCourse(courseId, "regular")}
+              >
+                {`Enroll Now -  ₹${course.discountedPrice}`}
+              </Button>
+            )}
 
             <Box
               sx={{ display: "flex", alignItems: "center", color: "#f7e9e9" }}
@@ -659,8 +667,8 @@ const CourseDescription = () => {
                       sx={{ mb: 2, display: "flex", alignItems: "center" }}
                     >
                       <AccessTimeIcon sx={{ mr: 1, color: "#4caf50" }} />
-                      <strong>Learning Days:</strong> Gain{" "}
-                      {item.hoursOfLearning}+ Days of comprehensive learning.
+                      <strong>Learning Hours:</strong> Gain{" "}
+                      {item.hoursOfLearning}+ Hours of comprehensive learning.
                     </Typography>
                     <Typography
                       variant="body1"

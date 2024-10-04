@@ -102,23 +102,25 @@ const CourseList = () => {
                         </Grid>
                       </Box>
                     )}
-                    <Button
-                      variant="contained"
-                      size="medium"
-                      sx={{
-                        width: '60%',
-                        marginTop: 'auto', // Push button to the bottom
-                        padding: '10px',
-                        backgroundColor: '#38b2ac', // Theme color
-                        color: '#fff',
-                        borderRadius: 25,
-                        textTransform: 'none',
-                        fontWeight: 'bold',
-                        alignSelf: 'flex-start', // Align button to the left
-                      }}
-                    >
-                      {course.isFree ? 'Enroll for Free' : 'Enroll Now'}
-                    </Button>
+                    {course.openforenrol && (
+                      <Button
+                        variant="contained"
+                        size="medium"
+                        sx={{
+                          width: '60%',
+                          marginTop: 'auto', // Push button to the bottom
+                          padding: '10px',
+                          backgroundColor: '#38b2ac', // Theme color
+                          color: '#fff',
+                          borderRadius: 25,
+                          textTransform: 'none',
+                          fontWeight: 'bold',
+                          alignSelf: 'flex-start', // Align button to the left
+                        }}
+                      >
+                        {course.isFree ? 'Enroll for Free' : 'Enroll Now'}
+                      </Button>
+                    )}
                   </CardContent>
                 </Card>
               </Link>
