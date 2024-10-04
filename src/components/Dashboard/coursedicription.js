@@ -19,6 +19,7 @@ import {
   List,
   ListItemText,
   ListItem,
+  TextField,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import main_axios from "../../utilities/mainaxios";
@@ -28,8 +29,9 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import CodeIcon from "@mui/icons-material/Code";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 
 const CourseDescription = () => {
   const { courseId } = useParams();
@@ -39,6 +41,10 @@ const CourseDescription = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [referralCode, setReferralCode] = useState("");
+  const [code, setCouponCode] = useState("");
+  const [originalPrice, setOriginalPrice] = useState(0);
+  const [couponApplied, setCouponApplied] = useState(false);
   const userData = JSON.parse(localStorage.getItem("user"));
   const userId = userData.id;
 
@@ -57,6 +63,7 @@ const CourseDescription = () => {
     try {
       const response = await main_axios.get(`/courses/${courseId}`);
       setCourse(response.data);
+      setOriginalPrice(response.data.discountedPrice);
     } catch (error) {
       console.error("Error fetching course details:", error);
     } finally {
@@ -81,6 +88,7 @@ const CourseDescription = () => {
         userId,
         amount: course.discountedPrice,
         paymentMethod: "razorpay",
+        referralCode,
       });
       const { order_id } = response.data; // This assumes `order_id` is returned by your backend
 
@@ -104,9 +112,7 @@ const CourseDescription = () => {
             razorpay_signature,
             status: "paid", // Set the payment status
             paymentId: razorpay_payment_id, // Store the payment ID
-            paidAt: Date.now(), // Timestamp of payment
-            courseId, // Include the course ID
-            type, // Include the type (course type, etc.)
+            referralCode,
           };
 
           // Send payment verification details along with additional fields to the backend
@@ -115,8 +121,11 @@ const CourseDescription = () => {
 
             setSnackbarMessage("Course purchased successfully!");
             setSnackbarSeverity("success");
-            setSnackbarOpen(true)
-            const response = await main_axios.post(`/courses/purchases/`, { courseId, type:type });
+            setSnackbarOpen(true);
+            const response = await main_axios.post(`/courses/purchases/`, {
+              courseId,
+              type: type,
+            });
 
             // Refetch course details after purchase
             fetchCourseDetails();
@@ -222,20 +231,6 @@ const CourseDescription = () => {
               p: 3,
             }}
           >
-            {/* <Chip
-    
-        label={`${Math.round(((course.price - course.discountedPrice) / course.price) * 100)}% OFF`}
-        color="secondary"
-        sx={{
-          position: 'absolute',
-          top: 16,
-          left: 16,
-          borderRadius: '16px',
-          backgroundColor: '#17bf9e',
-          color: '#fff',
-        }}
-      /> */}
-
             <Avatar
               src={course.imageUrl}
               variant="rounded"
@@ -288,20 +283,6 @@ const CourseDescription = () => {
 
           {/* Right Side */}
           <Box sx={{ flex: 1, p: 3 }}>
-            {/* <Chip
-  label="Enroll for Demo"
-  onClick={() => handlePurchaseCourse(courseId, 'demo')}
-  sx={{ 
-    position: 'absolute', 
-    top: 8, 
-    right: 8, 
-    cursor: 'pointer',
-    zIndex: 1,
-    backgroundColor: "#ff7043",
-    color: "#fff",
-    padding: "12px",
-  }}
-/> */}
             <br></br>
 
             <Typography
@@ -319,6 +300,200 @@ const CourseDescription = () => {
             {/* Add more course details here */}
           </Box>
         </Box>
+
+        {/* New section for referral code */}
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
+              padding: "24px",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              mt: 4,
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                mb: 3,
+                color: "#1a237e",
+                borderBottom: "2px solid #1a237e",
+                paddingBottom: "8px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <LocalOfferIcon sx={{ mr: 1, color: "#1a237e" }} />
+              Apply Referral Code
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Referral Code"
+                  variant="outlined"
+                  fullWidth
+                  value={referralCode}
+                  onChange={(e) => setReferralCode(e.target.value)}
+                  sx={{
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#1a237e",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#1a237e",
+                    },
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#1a237e",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#3f51b5" },
+              }}
+              onClick={async () => {
+                try {
+                  const response = await main_axios.post(
+                    "/validate-referral-code",
+                    { referralCode }
+                  );
+                  if (response.data.isValid) {
+                    setSnackbarMessage("Referral code applied successfully!");
+                    setSnackbarSeverity("success");
+                  } else {
+                    setSnackbarMessage(
+                      "Invalid referral code. Please try again."
+                    );
+                    setSnackbarSeverity("error");
+                  }
+                } catch (error) {
+                  console.error("Error validating referral code:", error);
+                  setSnackbarMessage(
+                    "Error validating referral code. Please try again."
+                  );
+                  setSnackbarSeverity("error");
+                }
+                setSnackbarOpen(true);
+              }}
+            >
+              Apply
+            </Button>
+          </Box>
+        </Grid>
+
+        {/* New section for coupon code */}
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: "8px",
+              padding: "24px",
+              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              mt: 4,
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: "bold",
+                mb: 3,
+                color: "#1a237e",
+                borderBottom: "2px solid #1a237e",
+                paddingBottom: "8px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <ConfirmationNumberIcon sx={{ mr: 1, color: "#1a237e" }} />
+              Apply Coupon Code
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Coupon Code"
+                  variant="outlined"
+                  fullWidth
+                  value={code}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  sx={{
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "#1a237e",
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#3f51b5",
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "#1a237e",
+                    },
+                  }}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#1a237e",
+                color: "#fff",
+                "&:hover": { backgroundColor: "#3f51b5" },
+              }}
+              onClick={async () => {
+                if (couponApplied) {
+                  setSnackbarMessage("A coupon has already been applied.");
+                  setSnackbarSeverity("warning");
+                  setSnackbarOpen(true);
+                  return;
+                }
+                try {
+                  const response = await main_axios.post("coupon/validate", {
+                    code,
+                    courseId,
+                  });
+                  if (response.data.valid) {
+                    setSnackbarMessage("Coupon applied successfully!");
+                    setSnackbarSeverity("success");
+                    const discount = response.data.coupon.discountValue;
+                    setCourse((prevCourse) => ({
+                      ...prevCourse,
+                      discountedPrice: originalPrice * (1 - discount / 100),
+                    }));
+                    setCouponApplied(true);
+                  } else {
+                    setSnackbarMessage(
+                      "Invalid coupon code. Please try again."
+                    );
+                    setSnackbarSeverity("error");
+                  }
+                } catch (error) {
+                  console.error("Error validating coupon code:", error);
+                  setSnackbarMessage(
+                    "Error validating coupon code. Please try again."
+                  );
+                  setSnackbarSeverity("error");
+                }
+                setSnackbarOpen(true);
+              }}
+            >
+              Apply
+            </Button>
+          </Box>
+        </Grid>
 
         {/* Course Details */}
         <Grid item xs={12} md={6}>
