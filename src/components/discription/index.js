@@ -123,27 +123,32 @@ const CourseDescription = () => {
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
               }}
             />
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#ff7043",
-                color: "#fff",
-                padding: "14px 40px",
-                fontSize: "1.25rem",
-                fontWeight: "bold",
-                borderRadius: "30px",
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "#f4511e",
-                  transform: "scale(1.05)",
-                  transition: "all 0.3s ease",
-                },
-                mb: 3,
-              }}
-              onClick={() => handlePurchaseCourse(courseId, "regular")}
-            >
-              {`Enroll Now -  ₹${course.discountedPrice}`}
-            </Button>
+           {course.openforenrol && (
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#ff7043",
+                  color: "#fff",
+                  padding: "12px 36px",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  borderRadius: "30px",
+                  fontSize: "1.25rem",
+                  padding: "10px 16px",
+                  "& .MuiChip-label": {
+                    fontSize: "1.25rem",
+                  },
+
+                  textTransform: "none",
+
+                  "&:hover": { backgroundColor: "#f4511e" },
+                  mb: 2,
+                }}
+                onClick={() => handlePurchaseCourse(courseId, "regular")}
+              >
+                {`Enroll Now -  ₹${course.discountedPrice}`}
+              </Button>
+            )}
 
             <Box
               sx={{ display: "flex", alignItems: "center", color: "#f7e9e9" }}
