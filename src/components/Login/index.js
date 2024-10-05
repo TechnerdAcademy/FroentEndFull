@@ -15,31 +15,39 @@ import {
   Spinner,
 } from "reactstrap";
 import axios from "axios";
-import { FaEye, FaEyeSlash, FaUser, FaMobileAlt, FaUniversity } from 'react-icons/fa';
-import { AiOutlineMail, AiOutlineLock, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {
+  FaEye,
+  FaEyeSlash,
+  FaUser,
+  FaMobileAlt,
+  FaUniversity,
+} from "react-icons/fa";
+import {
+  AiOutlineMail,
+  AiOutlineLock,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+} from "react-icons/ai";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import main_axios from "../../utilities/mainaxios";
-
-
 
 const LoginPage = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState('');
+  const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   const [emailError, setEmailError] = useState("");
   const [mobileError, setMobileError] = useState("");
 
   const navigate = useNavigate();
-
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -69,7 +77,7 @@ const LoginPage = () => {
       });
       let data2 = data;
       console.log("Login successful", data.data);
-      
+
       localStorage.setItem("lastRefreshTime", Date.now());
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data2.tokens.access.token);
@@ -79,10 +87,14 @@ const LoginPage = () => {
       localStorage.setItem("roleId", data2.user.role_id);
       localStorage.setItem("rToken", data2.tokens.refresh.token);
       toast.success("Login successful!");
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error", error);
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         toast.error(error.response.data.message); // Show API error message
       } else {
         toast.error("Login failed. Please check your credentials.");
@@ -91,7 +103,7 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-  
+
   const handleRegister = async () => {
     try {
       setLoading(true);
@@ -105,23 +117,30 @@ const LoginPage = () => {
       }
       setEmailError("");
       setMobileError("");
-  
+
       const response = await main_axios.post("/auth/register", {
         name,
         email,
         mobile,
         password,
-        role_id: '1',
+        role_id: "1",
       });
       console.log("Registration successful", response.data);
       const { tokens } = response.data;
-      localStorage.setItem("userData", JSON.stringify({ name, email, mobile, password }));
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({ name, email, mobile, password })
+      );
       localStorage.setItem("token", tokens.access.token);
       localStorage.setItem("rToken", tokens.refresh.token);
       toast.success("Registration successful!");
     } catch (error) {
       console.error("Registration error", error);
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         toast.error(error.response.data.message); // Show API error message
       } else {
         toast.error("Registration failed. Please try again.");
@@ -130,7 +149,6 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-  
 
   const handleForgotPassword = async () => {
     try {
@@ -154,7 +172,7 @@ const LoginPage = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
-  
+
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
@@ -171,113 +189,113 @@ const LoginPage = () => {
   };
 
   const pageStyle = {
-    padding: '2rem',
-    backgroundColor: '#f8f9fa',
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: "2rem",
+    backgroundColor: "#f8f9fa",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const headerStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '1.5rem',
+    display: "flex",
+    alignItems: "center",
+    marginBottom: "1.5rem",
   };
 
   const iconStyle = {
-    fontSize: '2.5rem', 
-    marginRight: '10px',
-    color: '#17bf9e', 
+    fontSize: "2.5rem",
+    marginRight: "10px",
+    color: "#17bf9e",
   };
 
   const textStyle = {
-    color: '#343a40',
-    fontWeight: 'bold',
-    fontSize: '2.5rem',
+    color: "#343a40",
+    fontWeight: "bold",
+    fontSize: "2.5rem",
     fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
   };
 
   const tabLinkStyle = {
-    fontWeight: '600',
-    transition: 'color 0.3s ease-in-out',
-    color: '#343a40',
+    fontWeight: "600",
+    transition: "color 0.3s ease-in-out",
+    color: "#343a40",
   };
 
   const activeTabStyle = {
-    color: '#007bff',
-    borderBottom: '3px solid #007bff',
+    color: "#007bff",
+    borderBottom: "3px solid #007bff",
   };
 
   const formContainerStyle = {
-    maxWidth: '450px',
-    width: '100%',
-    background: '#ffffff',
-    padding: '2rem',
-    borderRadius: '10px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    flexDirection: 'column',
+    maxWidth: "450px",
+    width: "100%",
+    background: "#ffffff",
+    padding: "2rem",
+    borderRadius: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    display: "flex",
+    flexDirection: "column",
   };
 
   const formGroupStyle = {
-    marginBottom: '1.5rem',
+    marginBottom: "1.5rem",
   };
 
   const labelStyle = {
-    color: '#495057',
-    fontWeight: '500',
-    marginBottom: '0.5rem',
+    color: "#495057",
+    fontWeight: "500",
+    marginBottom: "0.5rem",
   };
 
   const inputGroupStyle = {
-    position: 'relative',
+    position: "relative",
   };
 
   const inputStyle = {
-    borderRadius: '5px',
-    borderColor: '#ced4da',
-    padding: '0.75rem 1rem',
-    fontSize: '1rem',
+    borderRadius: "5px",
+    borderColor: "#ced4da",
+    padding: "0.75rem 1rem",
+    fontSize: "1rem",
     fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
   };
 
   const buttonStyle = {
-    borderRadius: '50px',
-    padding: '0.5rem 1rem', // Decreased padding
-    fontSize: '0.8rem', // Decreased font size
-    fontWeight: '600',
-    borderColor: '#007bff',
-    color: '#fff',
-    backgroundColor: '#007bff',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    borderRadius: "50px",
+    padding: "0.5rem 1rem", // Decreased padding
+    fontSize: "0.8rem", // Decreased font size
+    fontWeight: "600",
+    borderColor: "#007bff",
+    color: "#fff",
+    backgroundColor: "#007bff",
+    cursor: "pointer",
+    transition:
+      "background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   };
 
   const buttonStyleHover = {
-    backgroundColor: '#0056b3',
-    boxShadow: '0 6px 8px rgba(0, 0, 0, 0.15)',
+    backgroundColor: "#0056b3",
+    boxShadow: "0 6px 8px rgba(0, 0, 0, 0.15)",
   };
 
   const cancelButtonStyle = {
     ...buttonStyle,
-    backgroundColor: '#dc3545',
-    borderColor: '#dc3545',
+    backgroundColor: "#dc3545",
+    borderColor: "#dc3545",
   };
 
   const buttonContainerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '1rem',
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "1rem",
   };
 
   const eyeIconStyle = {
-    cursor: 'pointer',
-    color: '#343a40', 
+    cursor: "pointer",
+    color: "#343a40",
   };
-
 
   return (
     <div style={pageStyle}>
@@ -285,13 +303,15 @@ const LoginPage = () => {
       <div style={headerStyle}>
         <i className="ri-pantone-line" style={iconStyle}></i>
         <span style={textStyle}>Technerds</span>
-       
       </div>
       <div style={formContainerStyle}>
         <Nav tabs className="justify-content-center">
           <NavItem className="w-33 text-center">
             <NavLink
-              style={{ ...tabLinkStyle, ...(activeTab === "1" ? activeTabStyle : {}) }}
+              style={{
+                ...tabLinkStyle,
+                ...(activeTab === "1" ? activeTabStyle : {}),
+              }}
               onClick={() => toggleTab("1")}
             >
               Sign In
@@ -299,7 +319,10 @@ const LoginPage = () => {
           </NavItem>
           <NavItem className="w-33 text-center">
             <NavLink
-              style={{ ...tabLinkStyle, ...(activeTab === "2" ? activeTabStyle : {}) }}
+              style={{
+                ...tabLinkStyle,
+                ...(activeTab === "2" ? activeTabStyle : {}),
+              }}
               onClick={() => toggleTab("2")}
             >
               Sign Up
@@ -307,7 +330,10 @@ const LoginPage = () => {
           </NavItem>
           <NavItem className="w-33 text-center">
             <NavLink
-              style={{ ...tabLinkStyle, ...(activeTab === "3" ? activeTabStyle : {}) }}
+              style={{
+                ...tabLinkStyle,
+                ...(activeTab === "3" ? activeTabStyle : {}),
+              }}
               onClick={() => toggleTab("3")}
             >
               Forgot Password
@@ -322,7 +348,9 @@ const LoginPage = () => {
                   Email
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><AiOutlineMail /></InputGroupText>
+                  <InputGroupText>
+                    <AiOutlineMail />
+                  </InputGroupText>
                   <Input
                     type="email"
                     name="email"
@@ -333,14 +361,20 @@ const LoginPage = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
-                {emailError && <div style={{ color: "red", marginTop: "0.5rem" }}>{emailError}</div>}
+                {emailError && (
+                  <div style={{ color: "red", marginTop: "0.5rem" }}>
+                    {emailError}
+                  </div>
+                )}
               </FormGroup>
               <FormGroup style={formGroupStyle}>
                 <Label for="signInPassword" style={labelStyle}>
                   Password
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><AiOutlineLock /></InputGroupText>
+                  <InputGroupText>
+                    <AiOutlineLock />
+                  </InputGroupText>
                   <Input
                     type={passwordVisible ? "text" : "password"}
                     name="password"
@@ -350,7 +384,10 @@ const LoginPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <InputGroupText style={eyeIconStyle} onClick={togglePasswordVisibility}>
+                  <InputGroupText
+                    style={eyeIconStyle}
+                    onClick={togglePasswordVisibility}
+                  >
                     {passwordVisible ? <FaEyeSlash /> : <FaEye />}
                   </InputGroupText>
                 </InputGroup>
@@ -381,7 +418,9 @@ const LoginPage = () => {
                   Name
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><FaUser /></InputGroupText>
+                  <InputGroupText>
+                    <FaUser />
+                  </InputGroupText>
                   <Input
                     type="text"
                     name="name"
@@ -398,7 +437,9 @@ const LoginPage = () => {
                   Email
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><AiOutlineMail /></InputGroupText>
+                  <InputGroupText>
+                    <AiOutlineMail />
+                  </InputGroupText>
                   <Input
                     type="email"
                     name="email"
@@ -409,40 +450,38 @@ const LoginPage = () => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
-                {emailError && <div style={{ color: "red", marginTop: "0.5rem" }}>{emailError}</div>}
+                {emailError && (
+                  <div style={{ color: "red", marginTop: "0.5rem" }}>
+                    {emailError}
+                  </div>
+                )}
               </FormGroup>
               <Label for="signUpEmail" style={labelStyle}>
-                  Organisation/University
-                </Label>
-                <InputGroup style={inputGroupStyle}>
-  <InputGroupText><FaUniversity /></InputGroupText> {/* Updated icon */}
-  <Input
-    type="text"
-    name="Organisation/University"
-    id="signUpOrganisation"
-    placeholder="Enter your Organisation/University"
-    style={inputStyle}
-  />
-</InputGroup>
-<Label for="signUpEmail" style={labelStyle}>
-Referrer's Name (if applicable)
-                </Label>
-<InputGroup style={inputGroupStyle}>
-  <InputGroupText><FaUser /></InputGroupText> {/* Icon for person */}
-  <Input
-    type="text"
-    name="referralName"
-    id="referralNameInput"
-    placeholder="If referred, enter the referrer's name"
-    style={inputStyle}
-  />
-</InputGroup>
+                Organisation/University
+              </Label>
+              <InputGroup style={inputGroupStyle}>
+                <InputGroupText>
+                  <FaUniversity />
+                </InputGroupText>{" "}
+                {/* Updated icon */}
+                <Input
+                  type="text"
+                  name="Organisation/University"
+                  id="signUpOrganisation"
+                  placeholder="Enter your Organisation/University"
+                  style={inputStyle}
+                />
+              </InputGroup>
+       
+
               <FormGroup style={formGroupStyle}>
                 <Label for="signUpMobile" style={labelStyle}>
                   Mobile
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><FaMobileAlt /></InputGroupText>
+                  <InputGroupText>
+                    <FaMobileAlt />
+                  </InputGroupText>
                   <Input
                     type="text"
                     name="mobile"
@@ -453,14 +492,20 @@ Referrer's Name (if applicable)
                     onChange={(e) => setMobile(e.target.value)}
                   />
                 </InputGroup>
-                {mobileError && <div style={{ color: "red", marginTop: "0.5rem" }}>{mobileError}</div>}
+                {mobileError && (
+                  <div style={{ color: "red", marginTop: "0.5rem" }}>
+                    {mobileError}
+                  </div>
+                )}
               </FormGroup>
               <FormGroup style={formGroupStyle}>
                 <Label for="signUpPassword" style={labelStyle}>
                   Password
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><AiOutlineLock /></InputGroupText>
+                  <InputGroupText>
+                    <AiOutlineLock />
+                  </InputGroupText>
                   <Input
                     type={passwordVisible ? "text" : "password"}
                     name="password"
@@ -470,7 +515,10 @@ Referrer's Name (if applicable)
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <InputGroupText style={eyeIconStyle} onClick={togglePasswordVisibility}>
+                  <InputGroupText
+                    style={eyeIconStyle}
+                    onClick={togglePasswordVisibility}
+                  >
                     {passwordVisible ? <FaEyeSlash /> : <FaEye />}
                   </InputGroupText>
                 </InputGroup>
@@ -480,7 +528,9 @@ Referrer's Name (if applicable)
                   Confirm Password
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><AiOutlineLock /></InputGroupText>
+                  <InputGroupText>
+                    <AiOutlineLock />
+                  </InputGroupText>
                   <Input
                     type={confirmPasswordVisible ? "text" : "password"}
                     name="confirmPassword"
@@ -490,7 +540,10 @@ Referrer's Name (if applicable)
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
-                  <InputGroupText style={eyeIconStyle} onClick={toggleConfirmPasswordVisibility}>
+                  <InputGroupText
+                    style={eyeIconStyle}
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
                     {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
                   </InputGroupText>
                 </InputGroup>
@@ -521,7 +574,9 @@ Referrer's Name (if applicable)
                   Email
                 </Label>
                 <InputGroup style={inputGroupStyle}>
-                  <InputGroupText><AiOutlineMail /></InputGroupText>
+                  <InputGroupText>
+                    <AiOutlineMail />
+                  </InputGroupText>
                   <Input
                     type="email"
                     name="email"
@@ -532,7 +587,11 @@ Referrer's Name (if applicable)
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </InputGroup>
-                {emailError && <div style={{ color: "red", marginTop: "0.5rem" }}>{emailError}</div>}
+                {emailError && (
+                  <div style={{ color: "red", marginTop: "0.5rem" }}>
+                    {emailError}
+                  </div>
+                )}
               </FormGroup>
               <div style={buttonContainerStyle}>
                 <Button

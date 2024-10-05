@@ -13,7 +13,7 @@ import main_axios from '../../utilities/mainaxios';
 const MyCourses = () => {
     const [id, setId] = useState("");
     const [courses, setCourses] = useState([]);
-    const [visibleCourses, setVisibleCourses] = useState({}); // State to toggle visibility for each course
+    const [visibleCourses, setVisibleCourses] = useState({});
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -27,9 +27,8 @@ const MyCourses = () => {
             const response = await main_axios.get(`/courses/purchases/user/${id}`);
             console.log('Fetched courses:', response.data);
             setCourses(response.data);
-            // Initialize visibility state for each course
             const initialVisibility = response.data.reduce((acc, course) => {
-                acc[course._id] = true; // Default to visible
+                acc[course._id] = true;
                 return acc;
             }, {});
             setVisibleCourses(initialVisibility);
@@ -52,120 +51,159 @@ const MyCourses = () => {
     };
 
     return (
-        <Box sx={{ padding: 4, backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
-            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#004d40', marginBottom: 3, textAlign: 'center' }}>
-                My Courses
+        <Box sx={{ padding: 4, backgroundColor: "#f0f4f8", minHeight: "100vh" }}>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1a3e72', marginBottom: 4, textAlign: 'center', letterSpacing: '0.05em' }}>
+                My Learning Journey
             </Typography>
 
             {courses.length === 0 ? (
-                <Box sx={{ textAlign: 'center', padding: 4, backgroundColor: "#fff", borderRadius: 2, boxShadow: 1 }}>
-                    <SentimentDissatisfiedIcon sx={{ fontSize: 60, color: '#004d40', marginBottom: 2 }} />
-                    <Typography variant="h6" sx={{ color: '#666', marginBottom: 1 }}>
-                        No Courses Found
+                <Box sx={{ textAlign: 'center', padding: 6, backgroundColor: "#fff", borderRadius: 4, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
+                    <SentimentDissatisfiedIcon sx={{ fontSize: 80, color: '#1a3e72', marginBottom: 3 }} />
+                    <Typography variant="h5" sx={{ color: '#333', marginBottom: 2, fontWeight: 600 }}>
+                        Your Course Library is Empty
                     </Typography>
-                    <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 2 }}>
-                        It seems you haven't enrolled in any courses yet. Explore our catalog to find something interesting!
+                    <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 3, maxWidth: '600px', margin: '0 auto', textAlign: 'justify' }}>
+                        It looks like you haven't enrolled in any courses yet. Explore our diverse catalog to find courses that align with your interests and career goals. Start your learning journey today!
                     </Typography>
                     <Button 
                         variant="contained" 
-                        sx={{ backgroundColor: '#004d40', '&:hover': { backgroundColor: '#00251a' } }}
+                        sx={{ 
+                            backgroundColor: '#1a3e72', 
+                            '&:hover': { backgroundColor: '#102a4c' },
+                            padding: '10px 20px',
+                            fontSize: '1rem'
+                        }}
                         href="/dashboard/courses">
-                        Browse Courses
+                        Discover Courses
                     </Button>
                 </Box>
             ) : (
                 <Grid container spacing={4}>
                     {courses.map((course) => (
                         <Grid item xs={12} md={6} lg={4} key={course._id}>
-                            <Card sx={{ display: 'flex', flexDirection: 'column', boxShadow: 2, borderRadius: 2, backgroundColor: "#fff" }}>
+                            <Card sx={{ 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                boxShadow: '0 4px 20px rgba(0,0,0,0.1)', 
+                                borderRadius: 3, 
+                                backgroundColor: "#fff",
+                                transition: 'transform 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-5px)'
+                                }
+                            }}>
                                 <CardMedia
                                     component="img"
-                                    sx={{ height: 160, borderRadius: '4px 4px 0 0', objectFit: 'cover' }}
+                                    sx={{ height: 200, borderRadius: '12px 12px 0 0', objectFit: 'cover' }}
                                     image={course.imageUrl}
                                     alt={course.title}
                                 />
-                                <CardContent>
-                                    <Typography component="h5" variant="h6" sx={{ color: "#333", fontWeight: 'bold', marginBottom: 1 }}>
+                                <CardContent sx={{ padding: 3 }}>
+                                    <Typography component="h5" variant="h6" sx={{ color: "#1a3e72", fontWeight: 'bold', marginBottom: 1 }}>
                                         {course.title}
                                     </Typography>
-                                    <Typography variant="subtitle2" color="text.secondary" sx={{ marginBottom: 1 }}>
-                                        by {course.tutorName}
+                                    <Typography variant="subtitle2" color="text.secondary" sx={{ marginBottom: 2 }}>
+                                        Instructor: {course.tutorName}
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>
+                                    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 3, textAlign: 'justify' }}>
                                         {course.description}
                                     </Typography>
-                                    <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: 2 }}>
-                                        <DateRangeIcon fontSize="small" sx={{ color: '#004d40' }} />
+                                    <Stack direction="row" spacing={2} alignItems="center" sx={{ marginBottom: 3 }}>
+                                        <DateRangeIcon fontSize="small" sx={{ color: '#1a3e72' }} />
                                         <Typography variant="body2" color="text.secondary">
-                                            Start Date: {new Date(course.startDate).toLocaleDateString()}
+                                            Starts: {new Date(course.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                         </Typography>
                                     </Stack>
-                                    <Stack direction="row" spacing={1}>
+                                    <Stack direction="row" spacing={2}>
                                         <Button 
                                             variant="contained" 
-                                            color="primary" 
                                             startIcon={<LiveTvIcon />} 
                                             href={course.liveClassLink} 
                                             target="_blank" 
-                                            sx={{ flexGrow: 1, marginRight: 1, backgroundColor: '#004d40', '&:hover': { backgroundColor: '#00251a' } }}>
-                                            Join Live Class
+                                            sx={{ 
+                                                flexGrow: 1, 
+                                                backgroundColor: '#1a3e72', 
+                                                '&:hover': { backgroundColor: '#102a4c' },
+                                                padding: '10px 0'
+                                            }}>
+                                            Live Class
                                         </Button>
                                         <Button 
                                             variant="outlined" 
-                                            color="primary" 
                                             startIcon={<PlayCircleOutlineIcon />} 
                                             href={course.playlistLink} 
                                             target="_blank" 
-                                            sx={{ flexGrow: 1, borderColor: '#004d40', color: '#004d40', '&:hover': { borderColor: '#00251a', color: '#00251a' } }}>
-                                            View Playlist
+                                            sx={{ 
+                                                flexGrow: 1, 
+                                                borderColor: '#1a3e72', 
+                                                color: '#1a3e72', 
+                                                '&:hover': { borderColor: '#102a4c', color: '#102a4c' },
+                                                padding: '10px 0'
+                                            }}>
+                                            Playlist
                                         </Button>
                                     </Stack>
                                 </CardContent>
                                 <Divider sx={{ marginY: 2 }} />
-                                <CardContent>
+                                <CardContent sx={{ padding: 3 }}>
                                     <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', marginBottom: 1 }}>
-                                            Free Courses Included
+                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#1a3e72' }}>
+                                            Included Free Courses
                                         </Typography>
                                         <IconButton
                                             onClick={() => handleToggleVisibility(course._id)}
-                                            sx={{ color: '#004d40' }}
+                                            sx={{ color: '#1a3e72' }}
                                         >
                                             {visibleCourses[course._id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                         </IconButton>
                                     </Stack>
                                     {visibleCourses[course._id] && (
-                                        <Stack spacing={2}>
+                                        <Stack spacing={3} sx={{ marginTop: 2 }}>
                                             {course.freeCourses.map((freeCourse) => (
-                                                <Card key={freeCourse._id} sx={{ display: 'flex', alignItems: 'center', padding: 2, borderRadius: 1, backgroundColor: '#f9f9f9' }}>
+                                                <Card key={freeCourse._id} sx={{ 
+                                                    display: 'flex', 
+                                                    alignItems: 'center', 
+                                                    padding: 2, 
+                                                    borderRadius: 2, 
+                                                    backgroundColor: '#f7f9fc',
+                                                    transition: 'all 0.3s ease',
+                                                    '&:hover': {
+                                                        backgroundColor: '#e3e8f0',
+                                                        transform: 'translateX(5px)'
+                                                    }
+                                                }}>
                                                     <CardMedia
                                                         component="img"
-                                                        sx={{ width: 60, height: 60, borderRadius: 1, marginRight: 2 }}
+                                                        sx={{ width: 80, height: 80, borderRadius: 2, marginRight: 3 }}
                                                         image={freeCourse.imageUrl}
                                                         alt={freeCourse.title}
                                                     />
                                                     <Box sx={{ flex: 1 }}>
-                                                        <Typography variant="body2" sx={{ fontWeight: 'bold', marginBottom: 0.5 }}>
+                                                        <Typography variant="body1" sx={{ fontWeight: 'bold', marginBottom: 1, color: '#1a3e72' }}>
                                                             {freeCourse.title}
                                                         </Typography>
-                                                        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 0.5 }}>
-                                                            by {freeCourse.tutorName}
+                                                        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 1 }}>
+                                                            Instructor: {freeCourse.tutorName}
                                                         </Typography>
-                                                        <Stack direction="row" spacing={1} alignItems="center">
-                                                            <AccessTimeIcon fontSize="small" sx={{ color: '#004d40' }} />
+                                                        <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: 2 }}>
+                                                            <AccessTimeIcon fontSize="small" sx={{ color: '#1a3e72' }} />
                                                             <Typography variant="body2" color="text.secondary">
-                                                                {freeCourse.totalDuration} Days
+                                                                Duration: {freeCourse.totalDuration} Days
                                                             </Typography>
                                                         </Stack>
                                                         <Button 
                                                             variant="outlined" 
-                                                            color="primary" 
                                                             size="small" 
                                                             startIcon={<PlayCircleOutlineIcon />} 
                                                             href={freeCourse.playlistLink} 
                                                             target="_blank" 
-                                                            sx={{ marginTop: 1, color: '#004d40', borderColor: '#004d40', '&:hover': { color: '#00251a', borderColor: '#00251a' } }}>
-                                                            View Playlist
+                                                            sx={{ 
+                                                                color: '#1a3e72', 
+                                                                borderColor: '#1a3e72', 
+                                                                '&:hover': { color: '#102a4c', borderColor: '#102a4c' },
+                                                                padding: '5px 15px'
+                                                            }}>
+                                                            Start Learning
                                                         </Button>
                                                     </Box>
                                                 </Card>
