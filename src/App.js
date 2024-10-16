@@ -38,6 +38,10 @@ const Newsletter = loadable(() => import("./components/Newsletter/Newsletter"), 
 const LoginModal = loadable(() => import("./components/Login/index.js"), {
   fallback: <Loader />,
 });
+
+const ResetPass = loadable(() => import("./components/resetPass/index.js"), {
+  fallback: <Loader />,
+});
 const Dashboard = loadable(() => import("./components/Dashboard/index.js"), {
   fallback: <Loader />,
 });
@@ -81,6 +85,7 @@ function App() {
         <Route path="/testimonials" element={<LayoutWithHeaderFooter><Testimonials /></LayoutWithHeaderFooter>} />
         <Route path="/newsletter" element={<LayoutWithHeaderFooter><Newsletter /></LayoutWithHeaderFooter>} />
         <Route path="/login" element={<LayoutWithHeaderFooter><LoginModal /></LayoutWithHeaderFooter>} />
+        <Route path="/resetpassword" element={<LayoutWithHeaderFooter><ResetPass /></LayoutWithHeaderFooter>} />
         <Route path="/description/:courseId" element={<LayoutWithHeaderFooter><Description /></LayoutWithHeaderFooter>} />
         <Route path="/business-package" element={<LayoutWithHeaderFooter><Buisnesspackage/></LayoutWithHeaderFooter>} />
         <Route path="/privacy-policy" element={<LayoutWithHeaderFooter><PrivacrPolicy /></LayoutWithHeaderFooter>} />  // Add privacy policy route here
