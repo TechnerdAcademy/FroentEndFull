@@ -71,7 +71,7 @@ const BusinessPackageForm = () => {
                 Custom Business Solutions for Your Unique Needs
               </h3>
               <p className="pp">
-                At Technerds, we provide comprehensive solutions for your business needs. Whether you're looking to create a
+                At MADAN, we provide comprehensive solutions for your business needs. Whether you're looking to create a
                 stunning website, design captivating flyers, produce logo introduction videos, or craft introductory papers for your business, we have the right package for you.
               </p>
             </div>

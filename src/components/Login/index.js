@@ -302,7 +302,7 @@ const LoginPage = () => {
       <ToastContainer />
       <div style={headerStyle}>
         <i className="ri-pantone-line" style={iconStyle}></i>
-        <span style={textStyle}>Technerds</span>
+        <span style={textStyle}>MADAN</span>
       </div>
       <div style={formContainerStyle}>
         <Nav tabs className="justify-content-center">

@@ -102,7 +102,7 @@ const CourseDescription = () => {
         key: "rzp_live_JKBHNOoo7yeDnK", // Replace with your Razorpay key ID
         amount: course.discountedPrice * 100, // Amount in paisa
         currency: "INR",
-        name: "Technerds",
+        name: "MADAN",
         description: course.title,
         image: course.imageUrl,
         order_id: order_id, // Razorpay order ID from the backend

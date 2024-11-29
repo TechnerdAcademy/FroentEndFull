@@ -16,9 +16,18 @@ const ChooseUs = () => {
             <div className="choose__content">
               <h2>Why Choose Us</h2>
               <p>
-  At Technerds, we are committed to empowering your learning journey with top-notch tech education. Our platform is built on three pillars: expert instructors, comprehensive support, and unmatched flexibility. With a focus on student satisfaction, we ensure that every course is designed and delivered by industry-leading professionals who bring real-world experience to the classroom. Whether you're learning to code, diving into AI, or exploring data science, our resources are tailored to meet your goals. With 24/7 support and a vibrant learning community, Technerds is your trusted partner for advancing your tech career. Your success is our mission.
-</p>
-
+                At MADAN, we are committed to empowering your learning journey
+                with top-notch tech education. Our platform is built on three
+                pillars: expert instructors, comprehensive support, and
+                unmatched flexibility. With a focus on student satisfaction, we
+                ensure that every course is designed and delivered by
+                industry-leading professionals who bring real-world experience
+                to the classroom. Whether you're learning to code, diving into
+                AI, or exploring data science, our resources are tailored to
+                meet your goals. With 24/7 support and a vibrant learning
+                community, MADAN is your trusted partner for advancing your tech
+                career. Your success is our mission.
+              </p>
             </div>
           </Col>
 

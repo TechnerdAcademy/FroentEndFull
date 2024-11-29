@@ -20,14 +20,20 @@ const AboutUs = () => {
             <div className="about__content">
               <h2>About Us</h2>
               <p>
-              Welcome to Technerds, your go-to platform for all things e-learning. Our mission is to make education 
-              accessible and enjoyable for everyone, regardless of their location or background. We offer a wide
-              range of courses designed to help you achieve your educational and professional goals
+                At MADAN, we are driven by a passion for innovation and a deep
+                belief in the power of creativity. Founded with a vision to
+                shape the future, Our mission is to bridge the gap between bold
+                ideas and real-world solutions through cutting-edge technology.
+                By leveraging the potential of AI, robotics, and custom
+                hardware, we create products that not only push the boundaries
+                of what's possible but also have a positive impact on society.
+                Our team works tirelessly to turn visionary concepts into
+                tangible products
               </p>
 
               <div className="about__counter">
                 <div className=" d-flex gap-5 align-items-center">
-                <div className="single__counter">
+                  <div className="single__counter">
                     <span className="counter">
                       <CountUp start={0} end={20} duration={2} suffix="+" />
                     </span>

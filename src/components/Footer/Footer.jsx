@@ -34,7 +34,6 @@ const footerInfoLinks = [
   //   url: "#",
   // },
 
-
   // {
   //   display: "Terms of Service",
   //   url: "#",
@@ -48,7 +47,7 @@ const Footer = () => {
         <Row>
           <Col lg="3" md="6" className="mb-4">
             <h2 className=" d-flex align-items-center gap-1">
-              <i class="ri-pantone-line"></i> Technerds
+              <i class="ri-pantone-line"></i> MADAN
             </h2>
 
             {/* <div className="follows">

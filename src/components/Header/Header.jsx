@@ -9,13 +9,13 @@ const navLinks = [
   { display: "Courses", url: "/free-course" },
   // Link to /login
   // { display: "Why Choose Us", url: "/choose-us" },
-  {display:"BusinessPackage" , url:"/business-package"}, 
-  { display: "Login", url: "/login" }, 
+  { display: "BusinessPackage", url: "/business-package" },
+  { display: "Login", url: "/login" },
 ];
 
 const Header = () => {
   const menuRef = useRef();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const menuToggle = () => menuRef.current.classList.toggle("active__menu");
 
@@ -25,7 +25,7 @@ const Header = () => {
         <div className="navigation d-flex align-items-center justify-content-between">
           <div className="logo">
             <h2 className="d-flex align-items-center gap-1">
-              <i className="ri-pantone-line"></i> Technerds
+              <i className="ri-pantone-line"></i> MADAN
             </h2>
           </div>
 
@@ -34,9 +34,7 @@ const Header = () => {
               <ul className="nav__list">
                 {navLinks.map((item, index) => (
                   <li key={index} className="nav__item">
-                    <Link to={item.url}>
-                      {item.display}
-                    </Link>
+                    <Link to={item.url}>{item.display}</Link>
                   </li>
                 ))}
               </ul>
